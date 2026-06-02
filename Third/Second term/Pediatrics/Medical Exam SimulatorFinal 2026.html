@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي الامتحانات الطبية - فاينل 2026</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --primary-light: #e0e7ff;
+            --success: #10b981;
+            --success-dark: #047857;
+            --success-light: #ecfdf5;
+            --danger: #ef4444;
+            --danger-dark: #b91c1c;
+            --danger-light: #fef2f2;
+            --warning: #f59e0b;
+            --warning-light: #fffbeb;
+            --card-bg: #ffffff;
+            --bg-color: #f8fafc;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            direction: rtl;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .layout-container {
+            display: flex;
+            width: 100%;
+            max-width: 1000px;
+            gap: 25px;
+            box-sizing: border-box;
+        }
+
+        /* العمود الرئيسي للأسئلة */
+        .main-quiz-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-width: 0; /* لمنع تمدد العناصر المرنة */
+        }
+
+        /* كارت السؤال */
+        .quiz-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-header h2 {
+            font-size: 20px;
+            color: var(--primary-dark);
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .question-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-tag {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            background-color: var(--primary-light);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .btn-flag {
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .btn-flag.flagged {
+            background-color: var(--warning-light);
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+
+        .question-text {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0 0 20px 0;
+            text-align: left;
+            direction: ltr;
+            line-height: 1.6;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: left;
+            direction: ltr;
+            color: var(--text-dark);
+            outline: none;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background-color: var(--bg-color);
+        }
+
+        .option-btn.selected {
+            border-color: var(--primary) !important;
+            background-color: var(--primary-light) !important;
+            color: var(--primary-dark) !important;
+        }
+
+        .option-btn.correct {
+            background-color: var(--success-light) !important;
+            border-color: var(--success) !important;
+            color: var(--success-dark) !important;
+            font-weight: 700;
+        }
+
+        .option-btn.wrong {
+            background-color: var(--danger-light) !important;
+            border-color: var(--danger) !important;
+            color: var(--danger-dark) !important;
+        }
+
+        .explanation-box {
+            background-color: #f0f4ff;
+            border-right: 4px solid var(--primary);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .explanation-title {
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .explanation-text {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        .navigation-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .nav-btn {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background-color: var(--bg-color);
+            border-color: var(--primary);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* عمود لوحة التحكم الجانبية */
+        .sidebar {
+            width: 320px;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: sticky;
+            top: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 800;
+            margin: 0;
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 10px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            max-height: 320px;
+            overflow-y: auto;
+            padding-right: 2px;
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            border: 1px solid var(--border-color);
+            background-color: #ffffff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .grid-item:hover {
+            border-color: var(--primary);
+            background-color: var(--bg-color);
+        }
+
+        .grid-item.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .grid-item.answered {
+            background-color: #64748b;
+            color: white;
+            border-color: #64748b;
+        }
+
+        .grid-item.answered.active {
+            box-shadow: inset 0 0 0 3px #ffffff;
+        }
+
+        .grid-item.flagged {
+            background-color: var(--warning) !important;
+            color: white !important;
+            border-color: var(--warning) !important;
+        }
+
+        .grid-item.correct {
+            background-color: var(--success) !important;
+            color: white !important;
+            border-color: var(--success) !important;
+        }
+
+        .grid-item.wrong {
+            background-color: var(--danger) !important;
+            color: white !important;
+            border-color: var(--danger) !important;
+        }
+
+        .btn-submit-exam {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 20px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-align: center;
+        }
+
+        .btn-submit-exam:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* لوحة النتائج */
+        .results-panel {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+
+        .results-score {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--success);
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .layout-container { flex-direction: column; }
+            .sidebar { width: 100%; position: relative; top: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout-container">
+    <div class="main-quiz-content">
+        <!-- كارت عرض النتائج (يظهر بعد التسليم) -->
+        <div class="results-panel" id="results-panel">
+            <h2>📊 نتيجة التحدي الشامل</h2>
+            <div class="results-score" id="results-score">0 / 52</div>
+            <p id="results-feedback" style="font-weight: 600; color: var(--text-muted);">بالتوفيق والدرجات العالية!</p>
+            <button class="nav-btn" onclick="location.reload()">إعادة الاختبار بالكامل 🔄</button>
+        </div>
+
+        <!-- كارت السؤال الفردي -->
+        <div class="quiz-card" id="quiz-card">
+            <div class="card-header">
+                <h2 id="quiz-header-title">فاينل حكومي 2026 🩺</h2>
+                <div class="question-meta">
+                    <span class="question-tag" id="question-tag">سؤال 1 من 52</span>
+                    <button class="btn-flag" id="btn-flag" onclick="toggleFlag()" title="وضع علامة للمراجعة">🚩</button>
+                </div>
+            </div>
+
+            <p class="question-text" id="question-text">Loading...</p>
+            <div class="options-list" id="options-container"></div>
+
+            <div class="explanation-box" id="explanation-box">
+                <div class="explanation-title">💡 التوضيح العلمي (Telegram character limit compliant):</div>
+                <p class="explanation-text" id="explanation-content"></p>
+            </div>
+
+            <div class="navigation-row">
+                <button class="nav-btn" id="btn-prev" onclick="prevQuestion()" disabled>السابق ◀</button>
+                <button class="nav-btn" id="btn-next" onclick="nextQuestion()">التالي ▶</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- لوحة التحكم الجانبية -->
+    <div class="sidebar">
+        <h3 class="sidebar-title">خريطة الأسئلة (52 سؤالاً)</h3>
+        <div class="grid-container" id="nav-grid"></div>
+        <button class="btn-submit-exam" id="btn-submit" onclick="submitExam()">تسليم ورقة الإجابة 🏁</button>
+    </div>
+</div>
+
+<script>
+    // جميع أسئلة فاينل حكومي 2026 كاملة (52 سؤالاً)
+    const quizData = [
+        { q: "Neonatal screening programmers include?", options: ["Anemia", "Epilepsy", "Congenital hypothyroidism", "Typhoid", "Meningitis"], correct: 2, exp: "Congenital hypothyroidism is included in standard metabolic screening in Egypt." },
+        { q: "The following is a cause of neonatal respiratory distress?", options: ["Transient tachypnea of newborn", "Adult respiratory distress syndrome", "Bronchial asthma", "Headache", "Convulsions"], correct: 0, exp: "TTN is the most common cause of respiratory distress in full-term infants." },
+        { q: "Obstructive cause of vomiting in the newborn is?", options: ["Overfeeding", "Sepsis", "Intestinal atresia", "Gastroenteritis", "Inborn error of metabolism"], correct: 2, exp: "Intestinal atresia is a mechanical/obstructive cause. Overfeeding is non-obstructive." },
+        { q: "Koplik spots are pathognomonic signs for?", options: ["Measles", "Scarlet fever", "German measles", "Typhoid", "Tuberculosis"], correct: 0, exp: "Koplik spots on buccal mucosa are pathognomonic for Measles." },
+        { q: "Scarlet fever is characterized by?", options: ["Strawberry tongue", "Low grade fever", "Kolplik spots", "Vesicular rash"], correct: 0, exp: "Scarlet fever is characterized by a bright red 'strawberry tongue'." },
+        { q: "Which of the following is a cause of maculopapular rash?", options: ["Rubella", "Tuberculosis", "Poliomyelitis", "Chickenpox", "Meningitis"], correct: 0, exp: "Rubella and Measles present with flat red maculopapular rash." },
+        { q: "Convulsions, coma, and fever are important for the diagnosis of?", options: ["Scarlet fever", "Meningitis", "Measles", "Rubella", "Poliomyelitis"], correct: 1, exp: "High fever, convulsions, and coma are indicators of Meningitis." },
+        { q: "Moro reflex disappears at?", options: ["Birth", "7 months", "1 month", "2 months", "4 months"], correct: 4, exp: "Moro reflex disappears normally at 4-6 months (checked 4 months)." },
+        { q: "Which one of the following is a cause of Unconjugated hyperbilirubinemia in newborns?", options: ["G6PD", "Biliary atresia", "TORCH infection", "Galactosemia", "Urinary tract infection"], correct: 0, exp: "G6PD deficiency causes hemolysis, leading to unconjugated jaundice." },
+        { q: "Regarding nephritic syndrome manifestations, which of the following is not true?", options: ["Oliguria", "Hematuria (urine becomes reddish in colour)", "Hypertension", "Polyuria"], correct: 3, exp: "Nephritic syndrome presents with oliguria (decreased urine), not polyuria." },
+        { q: "BCG vaccine given at?", options: ["1st month of life", "3rd month of life", "1st year of life", "2nd year of life", "4th year of life"], correct: 0, exp: "Though given at birth, '1st month of life' is checked in this 2026 paper." },
+        { q: "Encephalitis may presents with?", options: ["Fever and convulsions", "Diabetics", "Diarrhea", "Epigastric pain", "Polyuria"], correct: 0, exp: "Encephalitis presents with fever, severe headache, and seizures." },
+        { q: "Which one of the following is not a major criteria of rheumatic heart disease?", options: ["Polyarthritis", "Carditis", "Subcutaneous nodule", "Jaundice"], correct: 3, exp: "Jaundice is not a major criterion of Rheumatic Fever." },
+        { q: "Which one is a complication in rheumatic heart disease?", options: ["Diabetes mellitus", "Jaundice", "Mitral regurge", "Anemia"], correct: 2, exp: "RHD causes valve damage, most commonly mitral regurgitation." },
+        { q: "Which one of the following is a cause of systemic hypertension?", options: ["Maculopapular rash", "Urinary tract infection", "Heart failure", "Chronic nephritis", "Fever"], correct: 3, exp: "Chronic nephritis is a primary renal cause of systemic hypertension." },
+        { q: "Which one of the following is a cause of heart failure?", options: ["Jaundice", "Myocarditis", "Fever", "Pleurisy", "Hepatitis"], correct: 1, exp: "Myocarditis directly impairs heart muscle function, leading to failure." },
+        { q: "Which one of the following is not a line in treatment of heart failure?", options: ["Digoxin", "Captopril", "Oxygen", "Insulin"], correct: 3, exp: "Insulin is not used in heart failure management." },
+        { q: "In marasmus there is?", options: ["Insufficient caloric intake", "Sufficient protein intake", "Adequate breast feeding", "No anemia", "Sufficient vitamins intake"], correct: 0, exp: "Marasmus is characterized by severe calorie and protein deficiency." },
+        { q: "The constant manifestation of kwashiorkor is?", options: ["Shrunken abdomen", "No mental changes", "No skin changes", "Decreased muscle fat ratio", "Edema"], correct: 4, exp: "Pitting, generalized edema is the absolute constant finding in Kwashiorkor." },
+        { q: "The cause of vit D nutritional rickets is?", options: ["Rachitogenic diet and delayed weaning", "Good weaning", "Failure of vit D activation", "Renal disease", "Anemia"], correct: 0, exp: "Nutritional rickets is caused by prolonged breastfeeding without sun exposure." },
+        { q: "One of the clinical presentations of marasmus is?", options: ["Increased weight", "Edema", "Loss of subcutaneous fat", "Adequate breast feeding", "Normal growth"], correct: 2, exp: "Marasmus presents with severe wasting and loss of subcutaneous fat." },
+        { q: "One of the clinical presentations of kwashiorkor is?", options: ["Jaundice", "Increased muscle fat ratio", "Loss of weight", "Skin changes", "Hypertension"], correct: 3, exp: "Skin changes (flaky paint rash) are variable findings of Kwashiorkor." },
+        { q: "One of the following is the cause of hemolytic anemia?", options: ["Iron deficiency anemia", "Thalassemia", "Vitamin B12 deficiency", "Folic acid deficiency", "Pure red cell aplasia"], correct: 1, exp: "Thalassemia is a chronic hereditary hemolytic anemia." },
+        { q: "Onset of diagnosis of thalassemia is?", options: ["Age of 1 month", "Age of 2 month", "Age of 4 month", "Age of 5 month", "Age of 6 month"], correct: 4, exp: "Thalassemia major typically manifests clinically after 6 months of age." },
+        { q: "Oral iron therapy is used for treatment of?", options: ["Thalassemia", "Sickle cell anemia", "Iron deficiency anemia", "Sideroblastic anemia", "Pure red cell aplasia"], correct: 2, exp: "Oral iron (3-6 mg/kg/day) is specifically used to treat IDA." },
+        { q: "One of the following is the cause of bone marrow failure?", options: ["Pure red cell aplasia", "Thalassemia", "Sickle cell anemia", "Spherocytosis", "G6PD"], correct: 0, exp: "Pure red cell aplasia is a cause of bone marrow failure." },
+        { q: "Baby can support his head at the age of?", options: ["6 months", "10 months", "3 months", "8 months"], correct: 2, exp: "Complete head support is achieved at 3 months of age." },
+        { q: "Oxygen therapy used in treatment of the following?", options: ["Tonsillitis", "Hypertension", "Pneumonia", "Nephritis"], correct: 2, exp: "Oxygen is indicated in pneumonia to treat hypoxia." },
+        { q: "Second degree respiratory distress?", options: ["Cyanosis", "Grunting", "Subcostal, intercostal retraction", "Tachypnea"], correct: 2, exp: "2nd degree respiratory distress features chest wall retractions." },
+        { q: "Patients with mild dehydration complain with?", options: ["Edema", "Hypertension", "Thirst", "Shock"], correct: 2, exp: "Mild dehydration (4% weight loss) presents with thirst only." },
+        { q: "Investigation for diagnosis of iron deficiency anemia?", options: ["Increased ferritin", "Increased iron", "Decreased iron", "Increased bilirubin", "Decreased vit B12"], correct: 2, exp: "Iron levels are decreased in iron deficiency anemia." },
+        { q: "Hemosiderosis is a complication of?", options: ["Iron deficiency anemia", "Decreased vit B12", "Decreased folic acid", "Thalassemia", "Blood loss"], correct: 3, exp: "Hemosiderosis is a complication of repeated transfusions in Thalassemia." },
+        { q: "Investigation for diagnosis of Thalassemia?", options: ["Increased iron", "Decreased iron", "Decreased ferritin", "Decreased bilirubin", "Decreased vit B12"], correct: 0, exp: "Electrophoresis is gold standard, showing increased iron due to hemolysis." },
+        { q: "Mongoloid features are diagnosis for?", options: ["Thalassemia major", "Iron deficiency anemia", "Sideroblastic anemia", "Vitamin B12 deficiency", "Folic acid deficiency"], correct: 0, exp: "Bone marrow expansion in Thalassemia major causes Mongoloid features." },
+        { q: "Regular blood transfusion is needed for treatment of?", options: ["Thalassemia major", "Vitamin B12 deficiency", "Iron deficiency", "Folic acid deficiency", "Thalassemia minor"], correct: 0, exp: "Thalassemia major requires lifelong regular packed RBC transfusions." },
+        { q: "Baby can walk with support at the age of?", options: ["6 months", "12 months", "3 months", "4 months", "5 months"], correct: 1, exp: "At 11-12 months, the infant can walk with support (cruising)." },
+        { q: "Growth means?", options: ["Increase in weight and size", "Gaining new skills", "Maturation of function", "Increase level of IQ", "Ability to do complex things"], correct: 0, exp: "Growth refers strictly to the physical increase in weight and size." },
+        { q: "Development means?", options: ["Increase in weight", "Increase in size", "Maturation of function", "Increase in height", "Increase in head circumference"], correct: 2, exp: "Development refers to the maturation of function and skills." },
+        { q: "The Average head circumference at birth is 35 cm?", options: ["True", "False"], correct: 0, exp: "True. Normal HC at birth is 35 cm." },
+        { q: "The average length at birth is 50 cm?", options: ["True", "False"], correct: 0, exp: "True. Normal length at birth is 50 cm." },
+        { q: "Active immunity may be natural or acquired?", options: ["True", "False"], correct: 0, exp: "True. Active immunity is formed by the body, naturally or acquired." },
+        { q: "Pneumonia can lead to cyanosis?", options: ["True", "False"], correct: 0, exp: "True. Severe pneumonia causes hypoxia, leading to central cyanosis." },
+        { q: "Rubella is characterized by vesicular rash?", options: ["True", "False"], correct: 1, exp: "False. Rubella is characterized by a maculopapular rash." },
+        { q: "Mumps is a bacterial infection transmitted by droplet infection?", options: ["True", "False"], correct: 1, exp: "False. Mumps is an acute viral infection, not bacterial." },
+        { q: "Renal failure and hypertension are complications of nephritic syndrome?", options: ["True", "False"], correct: 0, exp: "True. Complications include renal failure and hypertensive encephalopathy." },
+        { q: "Nephrotic syndrome Occurs mainly from 2-6 years?", options: ["True", "False"], correct: 0, exp: "True. Minimal change nephrotic syndrome mainly occurs in 2-6 year olds." },
+        { q: "Cephalhematoma is a cause of unconjugated hyperbilirubinemia?", options: ["True", "False"], correct: 0, exp: "True. Breakdown of blood in cephalhematoma increases bilirubin levels." },
+        { q: "Respiratory distress syndrome occurs almost exclusively in pre-term neonates?", options: ["True", "False"], correct: 0, exp: "True. RDS is due to surfactant deficiency, occurring in preterms." },
+        { q: "Overfeeding is the obstructive cause of vomiting in newborn?", options: ["True", "False"], correct: 1, exp: "False. Overfeeding is the most common non-obstructive cause of vomiting." },
+        { q: "Nephrotic syndrome can be treated with corticosteroids?", options: ["True", "False"], correct: 0, exp: "True. Prednisone (corticosteroid) is the primary first-line treatment." }
+    ];
+
+    let currentQuestionIndex = 0;
+    let userAnswers = new Array(quizData.length).fill(null);
+    let flaggedQuestions = new Array(quizData.length).fill(false);
+    let isSubmitted = false;
+
+    const navGrid = document.getElementById("nav-grid");
+    const questionText = document.getElementById("question-text");
+    const optionsContainer = document.getElementById("options-container");
+    const explanationBox = document.getElementById("explanation-box");
+    const explanationContent = document.getElementById("explanation-content");
+    const questionTag = document.getElementById("question-tag");
+    const btnFlag = document.getElementById("btn-flag");
+    const btnPrev = document.getElementById("btn-prev");
+    const btnNext = document.getElementById("btn-next");
+    const resultsPanel = document.getElementById("results-panel");
+    const resultsScore = document.getElementById("results-score");
+    const resultsFeedback = document.getElementById("results-feedback");
+    const btnSubmit = document.getElementById("btn-submit");
+
+    // توليد شبكة التنقل
+    function initNavGrid() {
+        navGrid.innerHTML = "";
+        for (let i = 0; i < quizData.length; i++) {
+            const item = document.createElement("div");
+            item.classList.add("grid-item");
+            item.textContent = i + 1;
+            item.id = `grid-item-${i}`;
+            item.addEventListener("click", () => jumpToQuestion(i));
+            navGrid.appendChild(item);
+        }
+    }
+
+    function updateNavGrid() {
+        for (let i = 0; i < quizData.length; i++) {
+            const item = document.getElementById(`grid-item-${i}`);
+            item.className = "grid-item"; // Reset class
+
+            if (i === currentQuestionIndex) {
+                item.classList.add("active");
+            }
+            if (userAnswers[i] !== null && !isSubmitted) {
+                item.classList.add("answered");
+            }
+            if (flaggedQuestions[i]) {
+                item.classList.add("flagged");
+            }
+            if (isSubmitted) {
+                if (userAnswers[i] === quizData[i].correct) {
+                    item.classList.add("correct");
+                } else {
+                    item.classList.add("wrong");
+                }
+            }
+        }
+    }
+
+    function loadQuestion(index) {
+        currentQuestionIndex = index;
+        const data = quizData[index];
+
+        // تحديث الميتا
+        questionTag.textContent = `سؤال ${index + 1} من ${quizData.length}`;
+        btnFlag.className = flaggedQuestions[index] ? "btn-flag flagged" : "btn-flag";
+
+        // نص السؤال
+        questionText.textContent = data.q;
+
+        // الخيارات
+        optionsContainer.innerHTML = "";
+        data.options.forEach((option, oIndex) => {
+            const btn = document.createElement("button");
+            btn.classList.add("option-btn");
+            btn.textContent = option;
+            btn.disabled = isSubmitted;
+
+            if (!isSubmitted) {
+                if (userAnswers[index] === oIndex) {
+                    btn.classList.add("selected");
+                }
+                btn.addEventListener("click", () => selectOption(oIndex));
+            } else {
+                // تلوين الإجابات بعد التسليم
+                if (oIndex === data.correct) {
+                    btn.classList.add("correct");
+                } else if (oIndex === userAnswers[index]) {
+                    btn.classList.add("wrong");
+                }
+            }
+            optionsContainer.appendChild(btn);
+        });
+
+        // التفسير
+        if (isSubmitted) {
+            explanationContent.textContent = data.exp;
+            explanationBox.style.display = "block";
+        } else {
+            explanationBox.style.display = "none";
+        }
+
+        // أزرار التنقل السفلي
+        btnPrev.disabled = index === 0;
+        btnNext.textContent = index === quizData.length - 1 ? "إنهاء الأسئلة ➔" : "التالي ▶";
+
+        updateNavGrid();
+    }
+
+    function selectOption(oIndex) {
+        userAnswers[currentQuestionIndex] = oIndex;
+        loadQuestion(currentQuestionIndex);
+    }
+
+    function toggleFlag() {
+        flaggedQuestions[currentQuestionIndex] = !flaggedQuestions[currentQuestionIndex];
+        btnFlag.className = flaggedQuestions[currentQuestionIndex] ? "btn-flag flagged" : "btn-flag";
+        updateNavGrid();
+    }
+
+    function nextQuestion() {
+        if (currentQuestionIndex < quizData.length - 1) {
+            loadQuestion(currentQuestionIndex + 1);
+        } else {
+            // التحقق من تسليم ورقة الإجابة
+            submitExam();
+        }
+    }
+
+    function prevQuestion() {
+        if (currentQuestionIndex > 0) {
+            loadQuestion(currentQuestionIndex - 1);
+        }
+    }
+
+    function jumpToQuestion(index) {
+        loadQuestion(index);
+    }
+
+    function submitExam() {
+        if (isSubmitted) return;
+
+        // فحص الأسئلة غير المحلولة
+        const unanswered = [];
+        userAnswers.forEach((ans, idx) => {
+            if (ans === null) unanswered.push(idx + 1);
+        });
+
+        if (unanswered.length > 0) {
+            const confirmSubmit = confirm(`لم تقم بحل الأسئلة التالية: ${unanswered.join(", ")}.\nهل أنت متأكد من رغبتك في تسليم الامتحان؟`);
+            if (!confirmSubmit) return;
+        } else {
+            const confirmSubmit = confirm("هل أنت متأكد من تسليم ورقة الإجابة وإنهاء الاختبار؟");
+            if (!confirmSubmit) return;
+        }
+
+        isSubmitted = true;
+        btnSubmit.style.display = "none";
+
+        // حساب النتيجة
+        let score = 0;
+        quizData.forEach((data, index) => {
+            if (userAnswers[index] === data.correct) {
+                score++;
+            }
+        });
+
+        // عرض النتيجة الكلية
+        resultsPanel.style.display = "block";
+        resultsScore.textContent = `${score} / ${quizData.length}`;
+
+        let percent = (score / quizData.length) * 100;
+        if (percent >= 85) {
+            resultsFeedback.textContent = "ممتاز جداً! جاهز للاختبار الرسمي ومستواك ممتاز 🌟";
+        } else if (percent >= 60) {
+            performanceFeedback.textContent = "أداء جيد جداً! يمكنك مراجعة الأسئلة الخاطئة من خريطة الأسئلة 📚";
+        } else {
+            resultsFeedback.textContent = "تحتاج لمراجعة إضافية. اضغط على أرقام الأسئلة لقراءة التفسير الطبي لكل سؤال 🔄";
+        }
+
+        // عرض التفسيرات في السؤال الحالي
+        loadQuestion(currentQuestionIndex);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // التشغيل الأول للمحاكي
+    initNavGrid();
+    loadQuestion(0);
+</script>
+
+</body>
+</html>
