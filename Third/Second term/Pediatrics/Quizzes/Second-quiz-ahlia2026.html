@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الكويز الثاني أهلية 2026 - طب الأطفال</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --primary-hover: #004494;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --background-color: #f4f7f6;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: auto;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        /* شاشة الإعدادات والبداية */
+        .setup-card {
+            text-align: center;
+            padding: 30px 15px;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px dashed #ccc;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        /* تخطيط جدول لعرض شريط الأسئلة والجانب */
+        .quiz-layout {
+            display: table;
+            width: 100%;
+            margin-top: 20px;
+            display: none; /* يظهر عند بدء الاختبار */
+        }
+
+        .quiz-main {
+            display: table-cell;
+            width: 73%;
+            vertical-align: top;
+            padding-left: 20px;
+        }
+
+        .quiz-sidebar {
+            display: table-cell;
+            width: 27%;
+            vertical-align: top;
+            border-right: 2px solid #e2e8f0;
+            padding-right: 20px;
+        }
+
+        /* لوحة أرقام الأسئلة الجانبية */
+        .sidebar-title {
+            font-weight: bold;
+            margin-bottom: 12px;
+            text-align: center;
+            color: #4a5568;
+            font-size: 0.95em;
+        }
+
+        .question-grid {
+            display: block;
+            text-align: center;
+        }
+
+        .nav-circle {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            margin: 5px;
+            background: #edf2f7;
+            color: #4a5568;
+            border-radius: 50%;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .nav-circle:hover {
+            background: #cbd5e0;
+        }
+
+        .nav-circle.active {
+            box-shadow: 0 0 0 3px var(--primary-color);
+        }
+
+        .nav-circle.answered {
+            background: #bee3f8;
+            color: #2b6cb0;
+        }
+
+        .nav-circle.correct {
+            background: #c6f6d5 !important;
+            color: #22543d !important;
+        }
+
+        .nav-circle.incorrect {
+            background: #fed7d7 !important;
+            color: #742a2a !important;
+        }
+
+        /* صندوق السؤال النشط - مع العلامة المائية */
+        .question-box {
+            position: relative; /* ضروري عشان العلامة المائية تبقى جواه */
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 5px solid var(--primary-color);
+            padding: 30px 20px;
+            border-radius: 8px;
+            direction: ltr;
+            text-align: left;
+            margin-bottom: 25px;
+            min-height: 250px;
+            overflow: hidden; /* عشان العلامة المائية متطلعش بره الصندوق */
+            z-index: 1;
+        }
+
+        /* العلامة المائية الخاصة بصندوق الأسئلة فقط */
+        .question-box::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%; /* حجم اللوجو جوه الصندوق */
+            height: 80%;
+            background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhIt1bXXa9kD1APc8qcfG9r-s-lmI_3C6Kg13rCIvfgPkMlXpBOud245tlNkAdnGQHEH6dNeYIn8OhziKzqcteGbRyAiZry4C0raemhyIsC-_BjpcPxZM4cHb13JGjRPNXagxJR27aj7SAnQDc14ciVx5JEHlLuu3Nju7i-geTkdZK4ySIHlL9p6ULremM/s16000/%D8%AA%D9%85%D8%B1%D9%8A%D8%B6%D9%88%D9%84%D9%88%D8%AC%D9%8A%20%D9%84%D9%88%D8%AC%D9%88%20png.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.15; /* درجة شفافية اللوجو */
+            z-index: -1; /* عشان يبقى ورا الكلام */
+            pointer-events: none; /* عشان ميمنعش الضغط على الإجابات */
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1a202c;
+            margin-bottom: 20px;
+            position: relative; /* عشان يبقى فوق العلامة المائية */
+            z-index: 2;
+        }
+
+        .options-list {
+            position: relative; /* عشان يبقى فوق العلامة المائية */
+            z-index: 2;
+        }
+
+        .options-list label {
+            display: block;
+            background: rgba(255, 255, 255, 0.9); /* خلفية بيضاء شبه شفافة للإجابات عشان تتقري بوضوح */
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-weight: 500;
+        }
+
+        .options-list label:hover {
+            background: rgba(237, 242, 247, 0.95);
+        }
+
+        .options-list input {
+            margin-right: 12px;
+            transform: scale(1.1);
+        }
+
+        /* العداد وأزرار التحكم */
+        #timerBox {
+            text-align: center;
+            font-size: 1.4em;
+            font-weight: bold;
+            color: var(--danger-color);
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 24px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s;
+            margin: 5px;
+            text-decoration: none;
+        }
+
+        .btn-primary { background: var(--primary-color); color: #fff; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary { background: #718096; color: #fff; }
+        .btn-secondary:hover { background: #4a5568; }
+        .btn-success { background: var(--success-color); color: #fff; width: 100%; margin-top: 15px; }
+        .btn-success:hover { background: #218838; }
+
+        #resultPanel {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            display: none;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 15px;
+            border-top: 1px dashed #cbd5e0;
+            font-size: 0.95em;
+        }
+
+        .footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 8px;
+        }
+
+        .option-correct {
+            background-color: #c6f6d5 !important;
+            border-color: #38a169 !important;
+            color: #22543d;
+            font-weight: bold;
+        }
+        .option-incorrect {
+            background-color: #fed7d7 !important;
+            border-color: #e53e3e !important;
+            color: #742a2a;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-layout, .quiz-main, .quiz-sidebar {
+                display: block;
+                width: 100%;
+                padding: 0;
+                border: none;
+            }
+            .quiz-sidebar {
+                margin-top: 25px;
+                border-top: 2px solid #e2e8f0;
+                padding-top: 15px;
+            }
+            .question-box::before {
+                width: 95%; /* تكبير اللوجو في الموبايل */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>الكويز الثاني أهلية 2026 - Pediatrics</h1>
+
+    <!-- مؤقت الاختبار التنازلي -->
+    <div id="timerBox">الوقت المتبقي: <span id="timeClock">00:00</span></div>
+
+    <!-- شاشة الإعدادات قبل بدء الكويز -->
+    <div class="setup-card" id="setupCard">
+        <h3>⚙️ إعدادات الاختبار</h3>
+        
+        <div class="form-group">
+            <label>⏱️ حدد وقت الحل يدوياً (بالدقائق):</label>
+            <input type="number" id="quizDurationInput" class="form-control" placeholder="مثال: 10 (اتركه فارغاً لحل مفتوح بدون وقت)">
+        </div>
+
+        <div class="form-group">
+            <label>🔀 نظام ترتيب الأسئلة:</label>
+            <select id="orderType" class="form-control">
+                <option value="normal">الترتيب الطبيعي (نفس الملزمة)</option>
+                <option value="random">ترتيب عشوائي (زيادة التحدي 🔥)</option>
+            </select>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 1.1em;" onclick="initiateQuizEngine()">ابدأ التحدي الآن 🚀</button>
+    </div>
+
+    <!-- منطقة عرض الكويز التفاعلي بعد البدء -->
+    <div class="quiz-layout" id="quizLayout">
+        
+        <!-- المنطقة الأساسية للسؤال النشط -->
+        <div class="quiz-main">
+            <!-- صندوق السؤال اللي جواه العلامة المائية -->
+            <div class="question-box" id="questionBox">
+                <!-- يتم توليد محتوى السؤال هنا برمجياً -->
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-secondary" id="prevBtn" onclick="navigateQuestion(-1)">⬅️ السابق</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="navigateQuestion(1)">التالي ➡️</button>
+            </div>
+        </div>
+
+        <!-- اللوحة الجانبية للتنقل وتتبع الأسئلة -->
+        <div class="quiz-sidebar">
+            <div class="sidebar-title">📌 خريطة تتبع الأسئلة</div>
+            <div class="question-grid" id="navigationGrid">
+                <!-- يتم توليد أرقام الأسئلة هنا تلقائياً -->
+            </div>
+            
+            <button class="btn btn-success" id="submitQuizBtn" onclick="finalizeQuizSubmission()">إنهاء الكويز وتسليم الورقة 📝</button>
+        </div>
+
+    </div>
+
+    <!-- لوحة عرض تفاصيل النتيجة بعد التسليم -->
+    <div id="resultPanel"></div>
+
+    <!-- تذييل الصفحة لحقوق الجروب وقنوات التليجرام -->
+    <div class="footer">
+        <p>👨‍⚕️ <strong>إعداد: جروب تمريضولوجي</strong></p>
+        <p>
+            <a href="https://t.me/Nursingology2025" target="_blank">🔗 قناة التليجرام</a> | 
+            <a href="https://t.me/NursBeniSuefBot" target="_blank">🤖 بوت القناة</a>
+        </p>
+    </div>
+</div>
+
+<script>
+    // قاعدة البيانات لـ "الكويز الثاني أهلية 2026"
+    const originalQuestionsDataset = [
+        { id: 1, text: "Diarrhea definition is only increase in the frequency of stool:", options: { A: "A. True", B: "B. False" }, correct: "B" },
+        { id: 2, text: "Acute diarrhea duration is more than 2 weeks:", options: { A: "A. True", B: "B. False" }, correct: "B" },
+        { id: 3, text: "Chronic diarrhea duration:", options: { A: "A. Less than 2 weeks", B: "B. Within 2 weeks", C: "C. More than 2 weeks" }, correct: "C" },
+        { id: 4, text: "Diarrhea can lead to renal failure:", options: { A: "A. True", B: "B. False" }, correct: "A" },
+        { id: 5, text: "In mild dehydration patient is:", options: { A: "A. Lethargic, depressed fontanelle", B: "B. Lethargic, very dry tongue, sunken eye", C: "C. Conscious, fontanelle normal, dry tongue" }, correct: "C" },
+        { id: 6, text: "Croup is an acute condition:", options: { A: "A. True", B: "B. False" }, correct: "A" },
+        { id: 7, text: "Viral infection accounts for 90% of causes of croup:", options: { A: "A. True", B: "B. False" }, correct: "A" },
+        { id: 8, text: "Symptoms of croup includes:", options: { A: "A. Barking cough, expiratory stridor", B: "B. Barking cough, inspiratory stridor", C: "C. Cough, lower limbs edema" }, correct: "B" },
+        { id: 9, text: "Croup symptoms are often worse during night:", options: { A: "A. True", B: "B. False" }, correct: "A" },
+        { id: 10, text: "Treatment of croup includes:", options: { A: "A. Nebulizer with Bronchodilator", B: "B. Nebulizer with garamycin", C: "C. Nebulizer with adrenalin" }, correct: "C" }
+    ];
+
+    let dynamicQuizQuestions = [];
+    let activeQuestionCursor = 0;
+    let userSelectedAnswers = {};
+    let countdownInterval;
+    let isQuizSubmitted = false;
+
+    // دالة لخلط الأسئلة بشكل عشوائي تماماً
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // بدء تشغيل محرك الكويز وإعداد البيئة
+    function initiateQuizEngine() {
+        const orderType = document.getElementById('orderType').value;
+        dynamicQuizQuestions = [...originalQuestionsDataset];
+        
+        if (orderType === 'random') {
+            shuffleArray(dynamicQuizQuestions);
+        }
+
+        // إعداد المؤقت الزمني
+        const durationInput = document.getElementById('quizDurationInput').value;
+        if (durationInput && parseInt(durationInput) > 0) {
+            document.getElementById('timerBox').style.display = 'block';
+            activateCountdownTimer(parseInt(durationInput));
+        }
+
+        // إخفاء شاشة الإعدادات وعرض واجهة الكويز
+        document.getElementById('setupCard').style.display = 'none';
+        document.getElementById('quizLayout').style.display = 'table';
+
+        generateSidebarNavigationGrid();
+        renderActiveQuestion();
+    }
+
+    // توليد الخريطة الجانبية لتتبع الأسئلة وحالة الحل
+    function generateSidebarNavigationGrid() {
+        const gridContainer = document.getElementById('navigationGrid');
+        gridContainer.innerHTML = '';
+        
+        dynamicQuizQuestions.forEach((q, index) => {
+            const circle = document.createElement('div');
+            circle.className = 'nav-circle';
+            circle.id = `nav-idx-${index}`;
+            circle.textContent = index + 1;
+            circle.onclick = () => { jumpToSpecificQuestion(index); };
+            gridContainer.appendChild(circle);
+        });
+        updateSidebarStatusVisuals();
+    }
+
+    // عرض السؤال الحالي مع الخيارات المتوفرة له
+    function renderActiveQuestion() {
+        const currentQuestion = dynamicQuizQuestions[activeQuestionCursor];
+        const container = document.getElementById('questionBox');
+        
+        let optionsHTML = '';
+        for (let [key, val] of Object.entries(currentQuestion.options)) {
+            let labelClass = '';
+            let checkedStr = (userSelectedAnswers[currentQuestion.id] === key) ? 'checked' : '';
+            let disabledStr = isQuizSubmitted ? 'disabled' : '';
+
+            // تمييز الإجابات باللون الأخضر والأحمر بعد التسليم
+            if (isQuizSubmitted) {
+                if (key === currentQuestion.correct) {
+                    labelClass = 'option-correct';
+                } else if (userSelectedAnswers[currentQuestion.id] === key && key !== currentQuestion.correct) {
+                    labelClass = 'option-incorrect';
+                }
+            }
+
+            optionsHTML += `
+                <label class="${labelClass}">
+                    <input type="radio" name="active_opt" value="${key}" ${checkedStr} ${disabledStr} onchange="registerUserSelection('${currentQuestion.id}', '${key}')">
+                    ${val}
+                </label>
+            `;
+        }
+
+        container.innerHTML = `
+            <div class="question-text">السؤال ${activeQuestionCursor + 1} من ${dynamicQuizQuestions.length} <br><br> ${currentQuestion.text}</div>
+            <div class="options-list">${optionsHTML}</div>
+        `;
+
+        // تحديث أزرار التحكم بالتنقل
+        document.getElementById('prevBtn').disabled = (activeQuestionCursor === 0);
+        document.getElementById('nextBtn').textContent = (activeQuestionCursor === dynamicQuizQuestions.length - 1) ? 'المراجعة والإنهاء 🏁' : 'التالي ➡️';
+        
+        updateSidebarStatusVisuals();
+    }
+
+    // حفظ خيار الطالب وتحديث خريطة التتبع فوراً
+    function registerUserSelection(questionId, selectedValue) {
+        if (isQuizSubmitted) return;
+        userSelectedAnswers[questionId] = selectedValue;
+        updateSidebarStatusVisuals();
+    }
+
+    // تحديث الألوان والحالة البصرية للشريط الجانبي
+    function updateSidebarStatusVisuals() {
+        dynamicQuizQuestions.forEach((q, index) => {
+            const circle = document.getElementById(`nav-idx-${index}`);
+            if (!circle) return;
+
+            // إزالة التنسيقات القديمة قبل التحديث
+            circle.classList.remove('active', 'answered');
+
+            if (index === activeQuestionCursor) {
+                circle.classList.add('active');
+            }
+            if (userSelectedAnswers[q.id]) {
+                circle.classList.add('answered');
+            }
+
+            // تلوين نهائي بعد تسليم النموذج
+            if (isQuizSubmitted) {
+                circle.classList.remove('active', 'answered');
+                if (userSelectedAnswers[q.id] === q.correct) {
+                    circle.classList.add('correct');
+                } else {
+                    circle.classList.add('incorrect');
+                }
+            }
+        });
+    }
+
+    // التنقل خطوة للأمام أو الخلف
+    function navigateQuestion(step) {
+        let newCursor = activeQuestionCursor + step;
+        if (newCursor >= 0 && newCursor < dynamicQuizQuestions.length) {
+            activeQuestionCursor = newCursor;
+            renderActiveQuestion();
+        }
+    }
+
+    // القفز المباشر لسؤال معين عبر شريط التنقل
+    function jumpToSpecificQuestion(index) {
+        activeQuestionCursor = index;
+        renderActiveQuestion();
+    }
+
+    // تشغيل العداد التنازلي التلقائي للوقت المحدد
+    function activateCountdownTimer(minutes) {
+        let totalSeconds = minutes * 60;
+        const clockDisplay = document.getElementById('timeClock');
+
+        countdownInterval = setInterval(() => {
+            let m = Math.floor(totalSeconds / 60);
+            let s = totalSeconds % 60;
+
+            m = m < 10 ? "0" + m : m;
+            s = s < 10 ? "0" + s : s;
+
+            clockDisplay.textContent = `${m}:${s}`;
+
+            if (--totalSeconds < 0) {
+                clearInterval(countdownInterval);
+                alert("⏰ انتهى الوقت المخصص للاختبار! سيتم تسليم إجاباتك الحالية فوراً تلقائياً.");
+                finalizeQuizSubmission();
+            }
+        }, 1000);
+    }
+
+    // حساب النتيجة النهائية وتلوين الإجابات وتسليم النموذج
+    function finalizeQuizSubmission() {
+        if (isQuizSubmitted) return;
+        
+        if (countdownInterval) clearInterval(countdownInterval);
+        isQuizSubmitted = true;
+
+        let totalCorrectScore = 0;
+        dynamicQuizQuestions.forEach(q => {
+            if (userSelectedAnswers[q.id] === q.correct) {
+                totalCorrectScore++;
+            }
+        });
+
+        const totalQuestionsCount = dynamicQuizQuestions.length;
+        const finalResultPanel = document.getElementById('resultPanel');
+        finalResultPanel.style.display = "block";
+
+        // تخصيص رسالة شكر وتقييم رايق حسب النتيجة
+        if (totalCorrectScore === totalQuestionsCount) {
+            finalResultPanel.style.backgroundColor = "#c6f6d5";
+            finalResultPanel.style.color = "#22543d";
+            finalResultPanel.innerHTML = `🏆 ممتاز! لقد قمت بحل ${totalCorrectScore} أسئلة صحيحة من إجمالي ${totalQuestionsCount} أسئلة!`;
+        } else if (totalCorrectScore >= totalQuestionsCount / 2) {
+            finalResultPanel.style.backgroundColor = "#feebc8";
+            finalResultPanel.style.color = "#744210";
+            finalResultPanel.innerHTML = `💪 جيد جداً! لقد قمت بحل ${totalCorrectScore} أسئلة صحيحة من إجمالي ${totalQuestionsCount} أسئلة.`;
+        } else {
+            finalResultPanel.style.backgroundColor = "#fed7d7";
+            finalResultPanel.style.color = "#742a2a";
+            finalResultPanel.innerHTML = `📚 تحتاج لمراجعة! لقد قمت بحل ${totalCorrectScore} أسئلة صحيحة من إجمالي ${totalQuestionsCount}.`;
+        }
+
+        // إخفاء زر التسليم وتحديث عرض الأسئلة لإظهار نموذج الإجابة النموذجي
+        document.getElementById('submitQuizBtn').style.display = 'none';
+        renderActiveQuestion();
+    }
+</script>
+
+</body>
+</html>
