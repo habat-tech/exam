@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الكويز الأول أهلية 2026 - طب الأطفال</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+        }
+        .question-block {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #e9f0f8;
+            border-radius: 6px;
+            direction: ltr; /* لأن الأسئلة بالإنجليزية */
+            text-align: left;
+        }
+        .question-text {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        .options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        .options input {
+            margin-right: 10px;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .submit-btn:hover {
+            background-color: #004494;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 5px;
+            display: none;
+        }
+        .correct { color: green; }
+        .incorrect { color: red; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>الكويز الأول أهلية 2026 - Pediatrics</h1>
+    
+    <form id="quizForm">
+        <div class="question-block">
+            <div class="question-text">1. Meningitis clinical presentation includes:</div>
+            <div class="options">
+                <label><input type="radio" name="q1" value="A"> A. Hypotension</label>
+                <label><input type="radio" name="q1" value="B"> B. Edema</label>
+                <label><input type="radio" name="q1" value="C"> C. Fever and convulsions</label>
+                <label><input type="radio" name="q1" value="D"> D. Respiratory distress</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text">2. One of the advantages of breast feeding to the mother:</div>
+            <div class="options">
+                <label><input type="radio" name="q2" value="A"> A. Increase incident of breast cancer</label>
+                <label><input type="radio" name="q2" value="B"> B. Decrease Incidence of breast cancer</label>
+                <label><input type="radio" name="q2" value="C"> C. Increase IQ for the baby</label>
+                <label><input type="radio" name="q2" value="D"> D. Decrease Incidence of Obesity of the baby</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text">3. Nephrotic syndrome clinical picture includes:</div>
+            <div class="options">
+                <label><input type="radio" name="q3" value="A"> A. Hypocholestrolemia</label>
+                <label><input type="radio" name="q3" value="B"> B. Edema</label>
+                <label><input type="radio" name="q3" value="C"> C. Hypoglycemia</label>
+                <label><input type="radio" name="q3" value="D"> D. Fever</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text">4. Rheumatic fever major criteria include:</div>
+            <div class="options">
+                <label><input type="radio" name="q4" value="A"> A. Fever</label>
+                <label><input type="radio" name="q4" value="B"> B. Carditis</label>
+                <label><input type="radio" name="q4" value="C"> C. Edema</label>
+                <label><input type="radio" name="q4" value="D"> D. Hypertension</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text">5. In nephritis urine amount is:</div>
+            <div class="options">
+                <label><input type="radio" name="q5" value="A"> A. Oliguric</label>
+                <label><input type="radio" name="q5" value="B"> B. Normal</label>
+                <label><input type="radio" name="q5" value="C"> C. Polyuric</label>
+                <label><input type="radio" name="q5" value="D"> D. None of the above</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text">6. Anti-infective advantage of breast milk is due to IgA especially in colostrum:</div>
+            <div class="options">
+                <label><input type="radio" name="q6" value="A"> A. True</label>
+                <label><input type="radio" name="q6" value="B"> B. False</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text">7. Aseptic meningitis is due to inflammation of meninges with Bacterial infection:</div>
+            <div class="options">
+                <label><input type="radio" name="q7" value="A"> A. True</label>
+                <label><input type="radio" name="q7" value="B"> B. False</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text">8. Breast feeding decreases risk for Atopy:</div>
+            <div class="options">
+                <label><input type="radio" name="q8" value="A"> A. True</label>
+                <label><input type="radio" name="q8" value="B"> B. False</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text">9. Encephalitis is inflammation of meninges:</div>
+            <div class="options">
+                <label><input type="radio" name="q9" value="A"> A. True</label>
+                <label><input type="radio" name="q9" value="B"> B. False</label>
+            </div>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text">10. E.coli One of causes of Bacterial meningitis in older child with good immunity without traumatic alteration:</div>
+            <div class="options">
+                <label><input type="radio" name="q10" value="A"> A. True</label>
+                <label><input type="radio" name="q10" value="B"> B. False</label>
+            </div>
+        </div>
+
+        <button type="button" class="submit-btn" onclick="calculateScore()">إرسال الإجابات وإظهار النتيجة</button>
+    </form>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    // الإجابات الصحيحة بناءً على الملف المرفق
+    const correctAnswers = {
+        q1: "C",
+        q2: "B",
+        q3: "B",
+        q4: "B",
+        q5: "A",
+        q6: "A",
+        q7: "B",
+        q8: "A",
+        q9: "B",
+        q10: "B" // E.coli is typical in neonates, not older children
+    };
+
+    function calculateScore() {
+        let score = 0;
+        let total = Object.keys(correctAnswers).length;
+        let form = document.getElementById('quizForm');
+        let formData = new FormData(form);
+
+        for (let [question, answer] of Object.entries(correctAnswers)) {
+            let userAnswer = formData.get(question);
+            let questionBlock = document.querySelector(`input[name="${question}"]`).closest('.question-block');
+            
+            // تنظيف التنسيقات السابقة
+            questionBlock.style.border = "none";
+
+            if (userAnswer === answer) {
+                score++;
+                questionBlock.style.borderLeft = "5px solid green";
+            } else {
+                questionBlock.style.borderLeft = "5px solid red";
+            }
+        }
+
+        let resultDiv = document.getElementById('result');
+        resultDiv.style.display = "block";
+        
+        if (score === total) {
+            resultDiv.style.backgroundColor = "#d4edda";
+            resultDiv.style.color = "#155724";
+            resultDiv.innerHTML = `ممتاز! نتيجتك: ${score} من ${total}`;
+        } else if (score >= total / 2) {
+            resultDiv.style.backgroundColor = "#fff3cd";
+            resultDiv.style.color = "#856404";
+            resultDiv.innerHTML = `جيد جداً! نتيجتك: ${score} من ${total}. راجع الأسئلة المحددة باللون الأحمر.`;
+        } else {
+            resultDiv.style.backgroundColor = "#f8d7da";
+            resultDiv.style.color = "#721c24";
+            resultDiv.innerHTML = `تحتاج للمزيد من المذاكرة. نتيجتك: ${score} من ${total}. راجع الأسئلة المحددة باللون الأحمر.`;
+        }
+    }
+</script>
+
+</body>
+</html>
