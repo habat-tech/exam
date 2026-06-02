@@ -3,121 +3,445 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الكويز التعويضي الأول حكومي 2026 - طب الأطفال</title>
+    <title>تمريضولوجي - الكويز التعويضي الأول حكومي 2026</title>
     <style>
-        :root { --primary-color: #0056b3; --primary-hover: #004494; --success-color: #28a745; --danger-color: #dc3545; --background-color: #f4f7f6; --card-bg: rgba(255, 255, 255, 0.98); }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--background-color); color: #333; line-height: 1.6; margin: 0; padding: 20px; position: relative; min-height: 100vh; }
-        body::before { content: ""; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 100%; background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhIt1bXXa9kD1APc8qcfG9r-s-lmI_3C6Kg13rCIvfgPkMlXpBOud245tlNkAdnGQHEH6dNeYIn8OhziKzqcteGbRyAiZry4C0raemhyIsC-_BjpcPxZM4cHb13JGjRPNXagxJR27aj7SAnQDc14ciVx5JEHlLuu3Nju7i-geTkdZK4ySIHlL9p6ULremM/s16000/%D8%AA%D9%85%D8%B1%D9%8A%D8%B6%D9%88%D9%84%D9%88%D8%AC%D9%8A%20%D9%84%D9%88%D8%AC%D9%88%20png.png'); background-repeat: no-repeat; background-position: center; background-size: 45%; opacity: 0.07; z-index: -1; pointer-events: none; }
-        .container { max-width: 950px; margin: auto; background: var(--card-bg); padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        h1 { text-align: center; color: var(--primary-color); margin-bottom: 5px; font-size: 1.8em; }
-        .sub-title { text-align: center; color: #666; margin-bottom: 25px; font-weight: bold; }
-        .setup-card { text-align: center; padding: 30px 15px; background: #fff; border-radius: 8px; border: 1px dashed #ccc; max-width: 500px; margin: auto; }
-        .form-group { margin-bottom: 20px; text-align: right; }
-        .form-group label { display: block; font-weight: bold; margin-bottom: 8px; color: #444; }
-        .form-control { width: 100%; padding: 10px; font-size: 1em; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        .quiz-layout { display: table; width: 100%; margin-top: 20px; display: none; }
-        .quiz-main { display: table-cell; width: 73%; vertical-align: top; padding-left: 20px; }
-        .quiz-sidebar { display: table-cell; width: 27%; vertical-align: top; border-right: 2px solid #e2e8f0; padding-right: 20px; }
-        .sidebar-title { font-weight: bold; margin-bottom: 12px; text-align: center; color: #4a5568; font-size: 0.95em; }
-        .question-grid { display: block; text-align: center; }
-        .nav-circle { display: inline-block; width: 40px; height: 40px; line-height: 40px; margin: 5px; background: #edf2f7; color: #4a5568; border-radius: 50%; text-align: center; font-weight: bold; cursor: pointer; transition: all 0.2s; user-select: none; }
-        .nav-circle:hover { background: #cbd5e0; }
-        .nav-circle.active { box-shadow: 0 0 0 3px var(--primary-color); }
-        .nav-circle.answered { background: #bee3f8; color: #2b6cb0; }
-        .nav-circle.correct { background: #c6f6d5 !important; color: #22543d !important; }
-        .nav-circle.incorrect { background: #fed7d7 !important; color: #742a2a !important; }
-        .question-box { background: #f7fafc; border: 1px solid #e2e8f0; border-left: 5px solid var(--primary-color); padding: 20px; border-radius: 8px; direction: ltr; text-align: left; margin-bottom: 25px; min-height: 200px; }
-        .question-text { font-size: 1.15em; font-weight: bold; color: #1a202c; margin-bottom: 15px; }
-        .options-list label { display: block; background: #fff; padding: 12px 15px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
-        .options-list label:hover { background: #edf2f7; }
-        .options-list input { margin-right: 12px; transform: scale(1.1); }
-        #timerBox { text-align: center; font-size: 1.4em; font-weight: bold; color: var(--danger-color); margin-bottom: 15px; display: none; }
-        .action-buttons { text-align: center; margin-top: 15px; }
-        .btn { display: inline-block; padding: 10px 24px; font-size: 1em; font-weight: bold; border-radius: 6px; cursor: pointer; border: none; transition: background 0.2s; margin: 5px; text-decoration: none; }
-        .btn-primary { background: var(--primary-color); color: #fff; }
-        .btn-primary:hover { background: var(--primary-hover); }
-        .btn-secondary { background: #718096; color: #fff; }
-        .btn-secondary:hover { background: #4a5568; }
-        .btn-success { background: var(--success-color); color: #fff; width: 100%; margin-top: 15px; }
-        .btn-success:hover { background: #218838; }
-        #resultPanel { margin-top: 25px; padding: 20px; border-radius: 8px; text-align: center; font-size: 1.3em; font-weight: bold; display: none; }
-        .footer { text-align: center; margin-top: 40px; padding-top: 15px; border-top: 1px dashed #cbd5e0; font-size: 0.95em; }
-        .footer a { color: var(--primary-color); text-decoration: none; font-weight: bold; margin: 0 8px; }
-        .option-correct { background-color: #c6f6d5 !important; border-color: #38a169 !important; color: #22543d; font-weight: bold; }
-        .option-incorrect { background-color: #fed7d7 !important; border-color: #e53e3e !important; color: #742a2a; }
-        @media (max-width: 768px) { .quiz-layout, .quiz-main, .quiz-sidebar { display: block; width: 100%; padding: 0; border: none; } .quiz-sidebar { margin-top: 25px; border-top: 2px solid #e2e8f0; padding-top: 15px; } }
+        :root {
+            --primary: #008080;
+            --secondary: #004d4d;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --success: #2e7d32;
+            --danger: #c62828;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        /* اللوجو الشفاف في الواجهة */
+        .front-logo {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 450px;
+            opacity: 0.25;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        header h1 { color: var(--primary); margin: 0; font-size: 24px; }
+        .links { margin-top: 10px; }
+        .links a {
+            display: inline-block;
+            margin: 0 5px;
+            text-decoration: none;
+            color: #fff;
+            background: var(--primary);
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+        .links a:hover { background: var(--secondary); }
+        
+        .setup-screen, .quiz-screen, .result-screen { display: none; }
+        .active { display: block; }
+        
+        .form-group { margin-bottom: 15px; text-align: right; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input[type="number"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;}
+        .form-group.checkbox { display: flex; align-items: center; justify-content: flex-start; flex-direction: row-reverse;}
+        .form-group.checkbox input { margin-left: 10px; width: 20px; height: 20px; }
+        
+        .btn {
+            padding: 12px 25px;
+            background: var(--primary); color: #fff;
+            border: none; border-radius: 5px;
+            font-size: 16px; cursor: pointer; transition: 0.3s;
+        }
+        .btn:hover { background: var(--secondary); }
+        .btn-block { display: block; width: 100%; padding: 15px; font-size: 18px; }
+        
+        .timer-bar {
+            display: flex; justify-content: space-between;
+            background: #ffebee; color: var(--danger);
+            padding: 10px; border-radius: 5px; font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .nav-dots {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 15px;
+        }
+        .dot {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            line-height: 35px;
+            margin: 4px;
+            background: #e0e0e0;
+            color: #333;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-align: center;
+            transition: 0.2s;
+        }
+        .dot.active {
+            border: 2px solid var(--primary);
+            background: #b2dfdb;
+            color: var(--secondary);
+        }
+        .dot.answered {
+            background: var(--primary);
+            color: #fff;
+        }
+        
+        .question-box { margin-bottom: 25px; text-align: left; direction: ltr;}
+        .question-text { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: var(--secondary);}
+        .options { list-style: none; padding: 0; }
+        .options li {
+            background: #e0f2f1; margin-bottom: 10px;
+            padding: 14px; border-radius: 5px; cursor: pointer;
+            transition: 0.2s; border: 1px solid transparent;
+        }
+        .options li:hover { background: #b2dfdb; }
+        .options li.selected { background: var(--primary); color: #fff; font-weight: bold; }
+
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .result-screen { text-align: center; }
+        .score-circle {
+            width: 130px; height: 130px; border-radius: 50%;
+            background: var(--primary); color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; font-weight: bold; margin: 0 auto 20px;
+        }
+
+        .review-section { margin-top: 30px; border-top: 2px solid var(--primary); padding-top: 20px; }
+        .review-item {
+            background: #fdfdfd; border: 1px solid #e0e0e0;
+            border-radius: 8px; padding: 15px; margin-bottom: 15px;
+            text-align: left; direction: ltr;
+        }
+        .review-item.item-correct { border-left: 5px solid var(--success); }
+        .review-item.item-wrong { border-left: 5px solid var(--danger); }
+        
+        .review-options { list-style: none; padding: 0; margin-top: 10px; }
+        .review-options li { padding: 8px; margin-bottom: 4px; border-radius: 4px; }
+        .review-options li.rev-correct { background: #e8f5e9; color: var(--success); font-weight: bold; }
+        .review-options li.rev-wrong { background: #ffebee; color: var(--danger); text-decoration: line-through; }
     </style>
 </head>
 <body>
 
+<img class="front-logo" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhIt1bXXa9kD1APc8qcfG9r-s-lmI_3C6Kg13rCIvfgPkMlXpBOud245tlNkAdnGQHEH6dNeYIn8OhziKzqcteGbRyAiZry4C0raemhyIsC-_BjpcPxZM4cHb13JGjRPNXagxJR27aj7SAnQDc14ciVx5JEHlLuu3Nju7i-geTkdZK4ySIHlL9p6ULremM/s16000/%D8%AA%D9%85%D8%B1%D9%8A%D8%B6%D9%88%D9%84%D9%88%D8%AC%D9%8A%20%D9%84%D9%88%D8%AC%D9%88%20png.png" alt="Logo">
+
 <div class="container">
-    <h1>الكويز التعويضي الأول حكومي 2026</h1>
-    <div class="sub-title" id="quizMeta">جروب تمريضولوجي المعتمد للتميز التعليمي</div>
-    <div id="timerBox">الوقت المتبقي: <span id="timeClock">00:00</span></div>
+    <header>
+        <h1>تمريضولوجي - الكويز التعويضي الأول حكومي 2026</h1>
+        <div class="links">
+            <a href="https://t.me/Nursingology2025" target="_blank">قناة التليجرام</a>
+            <a href="https://t.me/NursBeniSuefBot" target="_blank">بوت الدفعة</a>
+        </div>
+    </header>
 
-    <div class="setup-card" id="setupCard">
-        <h3>⚙️ إعدادات الاختبار</h3>
+    <div id="setup-screen" class="setup-screen active">
+        <h2>إعدادات الاختبار</h2>
         <div class="form-group">
-            <label>⏱️ حدد وقت الحل يدوياً (بالدقائق):</label>
-            <input type="number" id="quizDurationInput" class="form-control" placeholder="مثال: 10 (اتركه فارغاً لحل مفتوح بدون وقت)">
+            <label for="time-limit">مدة الاختبار (بالدقائق) - [ضع 0 لإلغاء الوقت]:</label>
+            <input type="number" id="time-limit" value="10" min="0">
         </div>
-        <div class="form-group">
-            <label>🔀 نظام ترتيب الأسئلة:</label>
-            <select id="orderType" class="form-control">
-                <option value="normal">الترتيب الطبيعي (نفس الملزمة)</option>
-                <option value="random">ترتيب عشوائي (زيادة التحدي 🔥)</option>
-            </select>
+        <div class="form-group checkbox">
+            <label for="randomize">ترتيب عشوائي للأسئلة</label>
+            <input type="checkbox" id="randomize" checked>
         </div>
-        <button class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 1.1em;" onclick="initiateQuizEngine()">ابدأ التحدي الآن 🚀</button>
+        <button class="btn btn-block" onclick="startQuiz()">ابدأ الاختبار 🚀</button>
     </div>
 
-    <div class="quiz-layout" id="quizLayout">
-        <div class="quiz-main">
-            <div class="question-box" id="questionBox"></div>
-            <div class="action-buttons">
-                <button class="btn btn-secondary" id="prevBtn" onclick="navigateQuestion(-1)">⬅️ السابق</button>
-                <button class="btn btn-primary" id="nextBtn" onclick="navigateQuestion(1)">التالي ➡️</button>
-            </div>
+    <div id="quiz-screen" class="quiz-screen">
+        <div class="timer-bar" id="timer-bar" style="display:none;">
+            <span>الوقت المتبقي:</span>
+            <span id="time-display">00:00</span>
         </div>
-        <div class="quiz-sidebar">
-            <div class="sidebar-title">📌 خريطة تتبع الأسئلة</div>
-            <div class="question-grid" id="navigationGrid"></div>
-            <button class="btn btn-success" id="submitQuizBtn" onclick="finalizeQuizSubmission()">إنهاء الكويز وتسليم الورقة 📝</button>
+
+        <div class="nav-dots" id="nav-dots"></div>
+
+        <div class="question-box">
+            <div id="q-text" class="question-text"></div>
+            <ul id="options-list" class="options"></ul>
+        </div>
+
+        <div class="quiz-controls">
+            <button class="btn" id="prev-btn" onclick="prevQuestion()">السؤال السابق</button>
+            <button class="btn" id="next-btn" onclick="nextQuestion()">السؤال التالي</button>
+            <button class="btn" id="finish-btn" onclick="endQuiz()" style="background-color: var(--success); display:none;">إنهاء الاختبار وعرض النتيجة</button>
         </div>
     </div>
-    <div id="resultPanel"></div>
 
-    <div class="footer">
-        <p>👨‍⚕️ <strong>إعداد وتنسيق: جروب تمريضولوجي</strong></p>
-        <p><a href="https://t.me/Nursingology2025" target="_blank">🔗 قناة التليجرام الرسمية</a> | <a href="https://t.me/NursBeniSuefBot" target="_blank">🤖 بوت القناة المساعد</a></p>
+    <div id="result-screen" class="result-screen">
+        <h2>النتيجة النهائية</h2>
+        <div class="score-circle" id="score-display">0 / 10</div>
+        <p id="feedback-msg" style="font-size: 18px; font-weight: bold; color: var(--secondary);"></p>
+        <button class="btn" onclick="location.reload()" style="margin-bottom: 20px;">إعادة الاختبار 🔄</button>
+        
+        <div class="review-section">
+            <h3>مراجعة تفصيلية للأسئلة والإجابات الصحيحة:</h3>
+            <div id="review-container"></div>
+        </div>
     </div>
 </div>
 
 <script>
-    const originalQuestionsDataset = [
-        { id: 1, text: "Edema is a constant manifestation of kwashiorkor?", options: { A: "A. True", B: "B. False" }, correct: "A" },
-        { id: 2, text: "Nephritis complication includes renal failure?", options: { A: "A. True", B: "B. False" }, correct: "A" },
-        { id: 3, text: "Nephrotic syndrome presents with?", options: { A: "A. Hyperbilirubinemia", B: "B. Hypotension", C: "C. Hypocholesterolemia", D: "D. Proteinuria" }, correct: "D" },
-        { id: 4, text: "Rheumatic fever major criteria includes?", options: { A: "A. Polyarthritis", B: "B. Fever", C: "C. Hypertension", D: "D. Hypothyroidism" }, correct: "A" },
-        { id: 5, text: "Rickets is vit D deficiency?", options: { A: "A. True", B: "B. False" }, correct: "A" },
-        { id: 6, text: "One of kwashiorkor clinical presentation is?", options: { A: "A. Decreased muscle fat ratio", B: "B. Increased muscle fat ratio", C: "C. Loss of weight", D: "D. Hypertension" }, correct: "A" },
-        { id: 7, text: "Acute renal failure may be caused by?", options: { A: "A. Hypothyroidism", B: "B. Hypoglycemia", C: "C. Hypovolemic shock", D: "D. Fever" }, correct: "C" },
-        { id: 8, text: "Marasmus clinical presentation includes?", options: { A: "A. Edema", B: "B. Loss of weight", C: "C. Polyarthritis", D: "D. Polyuria" }, correct: "B" },
-        { id: 9, text: "Nephrotic syndrome treated with?", options: { A: "A. Steroids", B: "B. Insulin", C: "C. Oxygen", D: "D. Fluids" }, correct: "A" },
-        { id: 10, text: "Rheumatic fever minor criteria includes Carditis?", options: { A: "A. True", B: "B. False" }, correct: "B" }
+    // أسئلة الكويز التعويضي الأول (حكومي 2026)
+    const originalQuestions = [
+        {
+            q: "1. Edema is a constant manifestation of kwashiorkor?",
+            options: ["A. True", "B. False"],
+            answer: 0 // True
+        },
+        {
+            q: "2. Nephritis complication includes renal failure?",
+            options: ["A. True", "B. False"],
+            answer: 0 // True
+        },
+        {
+            q: "3. Nephrotic syndrome presents with?",
+            options: ["A. Hyperbilirubinemia", "B. Hypotension", "C. Hypocholesterolemia", "D. Proteinuria"],
+            answer: 3 // D. Proteinuria
+        },
+        {
+            q: "4. Rheumatic fever major criteria includes?",
+            options: ["A. Polyarthritis", "B. Fever", "C. Hypertension", "D. Hypothyroidism"],
+            answer: 0 // A. Polyarthritis
+        },
+        {
+            q: "5. Rickets is vit D deficiency?",
+            options: ["A. True", "B. False"],
+            answer: 0 // True
+        },
+        {
+            q: "6. One of kwashiorkor clinical presentation is?",
+            options: ["A. Decreased muscle fat ratio", "B. Increased muscle fat ratio", "C. Loss of weight", "D. Hypertension"],
+            answer: 0 // A. Decreased muscle fat ratio
+        },
+        {
+            q: "7. Acute renal failure may be caused by?",
+            options: ["A. Hypothyroidism", "B. Hypoglycemia", "C. Hypovolemic shock", "D. Fever"],
+            answer: 2 // C. Hypovolemic shock
+        },
+        {
+            q: "8. Marasmus clinical presentation includes?",
+            options: ["A. Edema", "B. Loss of weight", "C. Polyarthritis", "D. Polyuria"],
+            answer: 1 // B. Loss of weight
+        },
+        {
+            q: "9. Nephrotic syndrome treated with?",
+            options: ["A. Steroids", "B. Insulin", "C. Oxygen", "D. Fluids"],
+            answer: 0 // A. Steroids
+        },
+        {
+            q: "10. Rheumatic fever minor criteria includes Carditis?",
+            options: ["A. True", "B. False"],
+            answer: 1 // False
+        }
     ];
 
-    let dynamicQuizQuestions = []; let activeQuestionCursor = 0; let userSelectedAnswers = {}; let countdownInterval; let isQuizSubmitted = false;
-    function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
-    function initiateQuizEngine() { const orderType = document.getElementById('orderType').value; dynamicQuizQuestions = [...originalQuestionsDataset]; if (orderType === 'random') shuffleArray(dynamicQuizQuestions); const durationInput = document.getElementById('quizDurationInput').value; if (durationInput && parseInt(durationInput) > 0) { document.getElementById('timerBox').style.display = 'block'; activateCountdownTimer(parseInt(durationInput)); } document.getElementById('setupCard').style.display = 'none'; document.getElementById('quizLayout').style.display = 'table'; document.getElementById('quizMeta').textContent = `عدد الأسئلة الكلي: ${dynamicQuizQuestions.length} أسئلة`; generateSidebarNavigationGrid(); renderActiveQuestion(); }
-    function generateSidebarNavigationGrid() { const gridContainer = document.getElementById('navigationGrid'); gridContainer.innerHTML = ''; dynamicQuizQuestions.forEach((q, index) => { const circle = document.createElement('div'); circle.className = 'nav-circle'; circle.id = `nav-idx-${index}`; circle.textContent = index + 1; circle.onclick = () => { jumpToSpecificQuestion(index); }; gridContainer.appendChild(circle); }); updateSidebarStatusVisuals(); }
-    function renderActiveQuestion() { const currentQuestion = dynamicQuizQuestions[activeQuestionCursor]; const container = document.getElementById('questionBox'); let optionsHTML = ''; for (let [key, val] of Object.entries(currentQuestion.options)) { let labelClass = ''; let checkedStr = (userSelectedAnswers[currentQuestion.id] === key) ? 'checked' : ''; let disabledStr = isQuizSubmitted ? 'disabled' : ''; if (isQuizSubmitted) { if (key === currentQuestion.correct) labelClass = 'option-correct'; else if (userSelectedAnswers[currentQuestion.id] === key && key !== currentQuestion.correct) labelClass = 'option-incorrect'; } optionsHTML += `<label class="${labelClass}"><input type="radio" name="active_opt" value="${key}" ${checkedStr} ${disabledStr} onchange="registerUserSelection('${currentQuestion.id}', '${key}')"> ${val}</label>`; } container.innerHTML = `<div class="question-text">${activeQuestionCursor + 1}. ${currentQuestion.text}</div><div class="options-list">${optionsHTML}</div>`; document.getElementById('prevBtn').disabled = (activeQuestionCursor === 0); document.getElementById('nextBtn').textContent = (activeQuestionCursor === dynamicQuizQuestions.length - 1) ? 'المراجعة والإنهاء 🏁' : 'التالي ➡️'; updateSidebarStatusVisuals(); }
-    function registerUserSelection(questionId, selectedValue) { if (isQuizSubmitted) return; userSelectedAnswers[questionId] = selectedValue; updateSidebarStatusVisuals(); }
-    function updateSidebarStatusVisuals() { dynamicQuizQuestions.forEach((q, index) => { const circle = document.getElementById(`nav-idx-${index}`); if (!circle) return; circle.classList.remove('active', 'answered'); if (index === activeQuestionCursor) circle.classList.add('active'); if (userSelectedAnswers[q.id]) circle.classList.add('answered'); if (isQuizSubmitted) { circle.classList.remove('active', 'answered'); if (userSelectedAnswers[q.id] === q.correct) circle.classList.add('correct'); else circle.classList.add('incorrect'); } }); }
-    function navigateQuestion(step) { let newCursor = activeQuestionCursor + step; if (newCursor >= 0 && newCursor < dynamicQuizQuestions.length) { activeQuestionCursor = newCursor; renderActiveQuestion(); } }
-    function jumpToSpecificQuestion(index) { activeQuestionCursor = index; renderActiveQuestion(); }
-    function activateCountdownTimer(minutes) { let totalSeconds = minutes * 60; const clockDisplay = document.getElementById('timeClock'); countdownInterval = setInterval(() => { let m = Math.floor(totalSeconds / 60); let s = totalSeconds % 60; m = m < 10 ? "0" + m : m; s = s < 10 ? "0" + s : s; clockDisplay.textContent = `${m}:${s}`; if (--totalSeconds < 0) { clearInterval(countdownInterval); alert("⏰ انتهى الوقت المخصص للاختبار! سيتم تسليم إجاباتك الحالية فوراً تلقائياً."); finalizeQuizSubmission(); } }, 1000); }
-    function finalizeQuizSubmission() { if (isQuizSubmitted) return; if (countdownInterval) clearInterval(countdownInterval); isQuizSubmitted = true; let totalCorrectScore = 0; dynamicQuizQuestions.forEach(q => { if (userSelectedAnswers[q.id] === q.correct) totalCorrectScore++; }); const totalQuestionsCount = dynamicQuizQuestions.length; const finalResultPanel = document.getElementById('resultPanel'); finalResultPanel.style.display = "block"; if (totalCorrectScore === totalQuestionsCount) { finalResultPanel.style.backgroundColor = "#c6f6d5"; finalResultPanel.style.color = "#22543d"; finalResultPanel.innerHTML = `🏆 الأسطورة البصمجي الكبير قفل الامتحان! نتيجتك: ${totalCorrectScore} من ${totalQuestionsCount}!`; } else if (totalCorrectScore >= totalQuestionsCount / 2) { finalResultPanel.style.backgroundColor = "#feebc8"; finalResultPanel.style.color = "#744210"; finalResultPanel.innerHTML = `💪 نتيجة ممتازة يا بطل! نتيجتك: ${totalCorrectScore} من ${totalQuestionsCount}.`; } else { finalResultPanel.style.backgroundColor = "#fed7d7"; finalResultPanel.style.color = "#742a2a"; finalResultPanel.innerHTML = `📚 تحتاج لمراجعة سريعة للمنهج. نتيجتك: ${totalCorrectScore} من ${totalQuestionsCount}.`; } document.getElementById('submitQuizBtn').style.display = 'none'; renderActiveQuestion(); }
+    let questions = [];
+    let currentQIndex = 0;
+    let timerInterval;
+    let timeRemaining;
+
+    function shuffleArray(array) {
+        let shuffled = JSON.parse(JSON.stringify(array));
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+
+    function startQuiz() {
+        const timeInput = parseInt(document.getElementById('time-limit').value);
+        const randomize = document.getElementById('randomize').checked;
+
+        let baseQuestions = randomize ? shuffleArray(originalQuestions) : JSON.parse(JSON.stringify(originalQuestions));
+        questions = baseQuestions.map(q => ({ ...q, userAnswer: null }));
+
+        document.getElementById('setup-screen').classList.remove('active');
+        document.getElementById('quiz-screen').classList.add('active');
+
+        if (timeInput > 0) {
+            timeRemaining = timeInput * 60;
+            document.getElementById('timer-bar').style.display = 'flex';
+            updateTimerDisplay();
+            timerInterval = setInterval(timerTick, 1000);
+        }
+
+        buildNavDots();
+        goToQuestion(0);
+    }
+
+    function timerTick() {
+        timeRemaining--;
+        updateTimerDisplay();
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            alert('انتهى وقت الاختبار!');
+            endQuiz();
+        }
+    }
+
+    function updateTimerDisplay() {
+        const m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+        const s = (timeRemaining % 60).toString().padStart(2, '0');
+        document.getElementById('time-display').innerText = `${m}:${s}`;
+    }
+
+    function buildNavDots() {
+        const dotsContainer = document.getElementById('nav-dots');
+        dotsContainer.innerHTML = '';
+        questions.forEach((_, index) => {
+            const dot = document.createElement('span');
+            dot.className = 'dot';
+            dot.id = `dot-${index}`;
+            dot.innerText = index + 1;
+            dot.onclick = () => goToQuestion(index);
+            dotsContainer.appendChild(dot);
+        });
+    }
+
+    function goToQuestion(index) {
+        currentQIndex = index;
+        
+        questions.forEach((q, idx) => {
+            const dot = document.getElementById(`dot-${idx}`);
+            dot.className = 'dot';
+            if (idx === currentQIndex) dot.classList.add('active');
+            if (q.userAnswer !== null) dot.classList.add('answered');
+        });
+
+        document.getElementById('prev-btn').style.visibility = (currentQIndex === 0) ? 'hidden' : 'visible';
+        
+        if (currentQIndex === questions.length - 1) {
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('finish-btn').style.display = 'inline-block';
+        } else {
+            document.getElementById('next-btn').style.display = 'inline-block';
+            document.getElementById('finish-btn').style.display = 'none';
+        }
+
+        const qData = questions[currentQIndex];
+        document.getElementById('q-text').innerText = qData.q;
+        
+        const optsList = document.getElementById('options-list');
+        optsList.innerHTML = '';
+        
+        qData.options.forEach((opt, oIdx) => {
+            const li = document.createElement('li');
+            li.innerText = opt;
+            if (qData.userAnswer === oIdx) li.classList.add('selected');
+            li.onclick = () => selectOption(oIdx);
+            optsList.appendChild(li);
+        });
+    }
+
+    function selectOption(oIdx) {
+        questions[currentQIndex].userAnswer = oIdx;
+        const allOpts = document.querySelectorAll('.options li');
+        allOpts.forEach(opt => opt.classList.remove('selected'));
+        allOpts[oIdx].classList.add('selected');
+        
+        document.getElementById(`dot-${currentQIndex}`).classList.add('answered');
+    }
+
+    function prevQuestion() {
+        if (currentQIndex > 0) goToQuestion(currentQIndex - 1);
+    }
+
+    function nextQuestion() {
+        if (currentQIndex < questions.length - 1) goToQuestion(currentQIndex + 1);
+    }
+
+    function endQuiz() {
+        clearInterval(timerInterval);
+        document.getElementById('quiz-screen').classList.remove('active');
+        document.getElementById('result-screen').classList.add('active');
+        
+        let finalScore = 0;
+        const reviewContainer = document.getElementById('review-container');
+        reviewContainer.innerHTML = '';
+
+        questions.forEach((q, index) => {
+            const isCorrect = (q.userAnswer === q.answer);
+            if (isCorrect) finalScore++;
+
+            const item = document.createElement('div');
+            item.className = `review-item ${isCorrect ? 'item-correct' : 'item-wrong'}`;
+            
+            const qTitle = document.createElement('h4');
+            qTitle.innerText = `${index + 1}. ${q.q}`;
+            qTitle.style.margin = '0 0 10px 0';
+            qTitle.style.color = isCorrect ? 'var(--success)' : 'var(--danger)';
+            item.appendChild(qTitle);
+
+            const uList = document.createElement('ul');
+            uList.className = 'review-options';
+
+            q.options.forEach((opt, oIdx) => {
+                const li = document.createElement('li');
+                li.innerText = opt;
+                
+                if (oIdx === q.answer) {
+                    li.classList.add('rev-correct');
+                    li.innerText += "  ✓ (الإجابة الصحيحة)";
+                } else if (oIdx === q.userAnswer && !isCorrect) {
+                    li.classList.add('rev-wrong');
+                    li.innerText += "  ✗ (إجابتك الخطأ)";
+                } else if (oIdx === q.userAnswer && isCorrect) {
+                    li.innerText += "  🎯 (إجابتك)";
+                }
+                uList.appendChild(li);
+            });
+
+            item.appendChild(uList);
+            reviewContainer.appendChild(item);
+        });
+        
+        document.getElementById('score-display').innerText = `${finalScore} / ${questions.length}`;
+        
+        const feedback = document.getElementById('feedback-msg');
+        if (finalScore === questions.length) feedback.innerText = "عاش يا دكتور! تقفيل مثالي بجد البصمجي الكبير طلع حوت 🩺🔥";
+        else if (finalScore >= questions.length / 2) feedback.innerText = "شغل عالي ونتيجة ممتازة، مراجعة بسيطة وهتقفل النهائي 💪";
+        else feedback.innerText = "ولا يهمك يا بطل، راجع الأسئلة وجرب تاني وهتظبط معاك 📚";
+    }
 </script>
 </body>
 </html>
