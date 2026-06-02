@@ -3,19 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الكويز الأول أهلية 2026 - طب الأطفال</title>
+    <title>الكويز الاول اهلية 2026</title>
     <style>
+        :root {
+            --primary-color: #0056b3;
+            --primary-hover: #004494;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --background-color: #f4f7f6;
+            --card-bg: rgba(255, 255, 255, 0.98);
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
+            background-color: var(--background-color);
             color: #333;
             line-height: 1.6;
             margin: 0;
             padding: 20px;
             position: relative;
+            min-height: 100vh;
         }
 
-        /* العلامة المائية */
+        /* العلامة المائية الشفافة الثابتة في الخلفية */
         body::before {
             content: "";
             position: fixed;
@@ -27,169 +37,267 @@
             background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhIt1bXXa9kD1APc8qcfG9r-s-lmI_3C6Kg13rCIvfgPkMlXpBOud245tlNkAdnGQHEH6dNeYIn8OhziKzqcteGbRyAiZry4C0raemhyIsC-_BjpcPxZM4cHb13JGjRPNXagxJR27aj7SAnQDc14ciVx5JEHlLuu3Nju7i-geTkdZK4ySIHlL9p6ULremM/s16000/%D8%AA%D9%85%D8%B1%D9%8A%D8%B6%D9%88%D9%84%D9%88%D8%AC%D9%8A%20%D9%84%D9%88%D8%AC%D9%88%20png.png');
             background-repeat: no-repeat;
             background-position: center;
-            background-size: 50%;
-            opacity: 0.1; /* شفافية العلامة المائية */
+            background-size: 45%;
+            opacity: 0.07; /* علامة مائية شفافة جداً ورايقة */
             z-index: -1;
             pointer-events: none;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 950px;
             margin: auto;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 1;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
 
         h1 {
             text-align: center;
-            color: #0056b3;
-            border-bottom: 2px solid #0056b3;
-            padding-bottom: 10px;
+            color: var(--primary-color);
             margin-bottom: 5px;
+            font-size: 1.8em;
         }
 
-        .quiz-info {
+        .sub-title {
             text-align: center;
-            font-size: 1.1em;
-            color: #555;
-            margin-bottom: 20px;
+            color: #666;
+            margin-bottom: 25px;
             font-weight: bold;
         }
 
-        .setup-screen {
+        /* شاشة الإعدادات والبداية */
+        .setup-card {
             text-align: center;
-            padding: 30px 0;
+            padding: 30px 15px;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px dashed #ccc;
+            max-width: 500px;
+            margin: auto;
         }
 
-        .setup-screen select {
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        .form-control {
+            width: 100%;
             padding: 10px;
-            font-size: 1.1em;
-            border-radius: 5px;
+            font-size: 1em;
             border: 1px solid #ccc;
-            margin: 10px 0;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        /* تخطيط جدول لعرض شريط الأسئلة والجانب */
+        .quiz-layout {
+            display: table;
+            width: 100%;
+            margin-top: 20px;
+            display: none; /* يظهر عند بدء الاختبار */
+        }
+
+        .quiz-main {
+            display: table-cell;
+            width: 73%;
+            vertical-align: top;
+            padding-left: 20px;
+        }
+
+        .quiz-sidebar {
+            display: table-cell;
+            width: 27%;
+            vertical-align: top;
+            border-right: 2px solid #e2e8f0;
+            padding-right: 20px;
+        }
+
+        /* لوحة أرقام الأسئلة الجانبية */
+        .sidebar-title {
+            font-weight: bold;
+            margin-bottom: 12px;
+            text-align: center;
+            color: #4a5568;
+            font-size: 0.95em;
+        }
+
+        .question-grid {
+            display: block;
+            text-align: center;
+        }
+
+        .nav-circle {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            margin: 5px;
+            background: #edf2f7;
+            color: #4a5568;
+            border-radius: 50%;
+            text-align: center;
+            font-weight: bold;
             cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .nav-circle:hover {
+            background: #cbd5e0;
+        }
+
+        .nav-circle.active {
+            box-shadow: 0 0 0 3px var(--primary-color);
+        }
+
+        .nav-circle.answered {
+            background: #bee3f8;
+            color: #2b6cb0;
+        }
+
+        .nav-circle.correct {
+            background: #c6f6d5 !important;
+            color: #22543d !important;
+        }
+
+        .nav-circle.incorrect {
+            background: #fed7d7 !important;
+            color: #742a2a !important;
+        }
+
+        /* صندوق السؤال النشط */
+        .question-box {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 5px solid var(--primary-color);
+            padding: 20px;
+            border-radius: 8px;
+            direction: ltr; /* محتوى طبي طبيعي بالإنجليزية */
+            text-align: left;
+            margin-bottom: 25px;
+            min-height: 200px;
+        }
+
+        .question-text {
+            font-size: 1.15em;
+            font-weight: bold;
+            color: #1a202c;
+            margin-bottom: 15px;
+        }
+
+        .options-list label {
+            display: block;
+            background: #fff;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .options-list label:hover {
+            background: #edf2f7;
+        }
+
+        .options-list input {
+            margin-right: 12px;
+            transform: scale(1.1);
+        }
+
+        /* العداد وأزرار التحكم */
+        #timerBox {
+            text-align: center;
+            font-size: 1.4em;
+            font-weight: bold;
+            color: var(--danger-color);
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin-top: 15px;
         }
 
         .btn {
             display: inline-block;
-            padding: 12px 25px;
-            background-color: #0056b3;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.1em;
+            padding: 10px 24px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 6px;
             cursor: pointer;
-            transition: background 0.3s;
-            margin: 10px 5px;
+            border: none;
+            transition: background 0.2s;
+            margin: 5px;
             text-decoration: none;
         }
 
-        .btn:hover {
-            background-color: #004494;
-        }
+        .btn-primary { background: var(--primary-color); color: #fff; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary { background: #718096; color: #fff; }
+        .btn-secondary:hover { background: #4a5568; }
+        .btn-success { background: var(--success-color); color: #fff; width: 100%; margin-top: 15px; }
+        .btn-success:hover { background: #218838; }
 
-        .btn-download {
-            background-color: #28a745;
-        }
-
-        .btn-download:hover {
-            background-color: #218838;
-        }
-
-        #timer {
+        #resultPanel {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
             text-align: center;
-            font-size: 1.5em;
+            font-size: 1.3em;
             font-weight: bold;
-            color: #dc3545;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .question-block {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #e9f0f8;
-            border-radius: 6px;
-            direction: ltr; /* لأن الأسئلة بالإنجليزية */
-            text-align: left;
-            border-right: 4px solid #0056b3;
-        }
-
-        .question-text {
-            font-weight: bold;
-            font-size: 1.1em;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-
-        .options label {
-            display: block;
-            margin-bottom: 8px;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 4px;
-            transition: background 0.2s;
-        }
-
-        .options label:hover {
-            background-color: #d1e1f0;
-        }
-
-        .options input {
-            margin-right: 10px;
-        }
-
-        #quizForm {
-            display: none;
-        }
-
-        #result {
-            margin-top: 20px;
-            padding: 15px;
-            font-size: 1.2em;
-            font-weight: bold;
-            text-align: center;
-            border-radius: 5px;
             display: none;
         }
 
         .footer {
             text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #ccc;
-            font-size: 1em;
+            margin-top: 40px;
+            padding-top: 15px;
+            border-top: 1px dashed #cbd5e0;
+            font-size: 0.95em;
         }
 
         .footer a {
-            color: #0056b3;
+            color: var(--primary-color);
             text-decoration: none;
             font-weight: bold;
-            margin: 0 10px;
+            margin: 0 8px;
         }
 
-        .footer a:hover {
-            text-decoration: underline;
+        /* النمط المخصص عند عرض الإجابة الصحيحة أو الخاطئة */
+        .option-correct {
+            background-color: #c6f6d5 !important;
+            border-color: #38a169 !important;
+            color: #22543d;
+            font-weight: bold;
+        }
+        .option-incorrect {
+            background-color: #fed7d7 !important;
+            border-color: #e53e3e !important;
+            color: #742a2a;
         }
 
-        /* تنسيقات الطباعة (للتحميل كـ PDF) */
-        @media print {
-            body::before {
-                opacity: 0.2 !important;
-                -webkit-print-color-adjust: exact;
+        @media (max-width: 768px) {
+            .quiz-layout, .quiz-main, .quiz-sidebar {
+                display: block;
+                width: 100%;
+                padding: 0;
+                border: none;
             }
-            .setup-screen, .btn, #timer, .footer {
-                display: none !important;
-            }
-            #quizForm {
-                display: block !important;
-            }
-            .container {
-                box-shadow: none;
+            .quiz-sidebar {
+                margin-top: 25px;
+                border-top: 2px solid #e2e8f0;
+                padding-top: 15px;
             }
         }
     </style>
@@ -198,226 +306,290 @@
 
 <div class="container">
     <h1>الكويز الأول أهلية 2026 - Pediatrics</h1>
-    <div class="quiz-info" id="quizInfo">عدد الأسئلة: 10 أسئلة</div>
+    <div class="sub-title" id="quizMeta">جروب تمريضولوجي المعتمد للتميز التعليمي</div>
 
-    <!-- شاشة الإعدادات -->
-    <div class="setup-screen" id="setupScreen">
-        <p>اختر طريقة الحل التي تفضلها:</p>
-        <select id="timerSelect">
-            <option value="0">بدون وقت (تدريب مفتوح)</option>
-            <option value="5">5 دقائق (سريع)</option>
-            <option value="10">10 دقائق (متوسط)</option>
-            <option value="15">15 دقيقة (مريح)</option>
-        </select>
-        <br>
-        <button class="btn" onclick="startQuiz()">ابدأ الكويز الآن</button>
-        <button class="btn btn-download" onclick="window.print()">تحميل الكويز (PDF)</button>
+    <!-- مؤقت الاختبار التنازلي -->
+    <div id="timerBox">الوقت المتبقي: <span id="timeClock">00:00</span></div>
+
+    <!-- شاشة الإعدادات قبل بدء الكويز -->
+    <div class="setup-card" id="setupCard">
+        <h3>⚙️ إعدادات الاختبار</h3>
+        
+        <div class="form-group">
+            <label>⏱️ حدد وقت الحل يدوياً (بالدقائق):</label>
+            <input type="number" id="quizDurationInput" class="form-control" placeholder="مثال: 10 (اتركه فارغاً لحل مفتوح بدون وقت)">
+        </div>
+
+        <div class="form-group">
+            <label>🔀 نظام ترتيب الأسئلة:</label>
+            <select id="orderType" class="form-control">
+                <option value="normal">الترتيب الطبيعي (نفس الملزمة)</option>
+                <option value="random">ترتيب عشوائي (زيادة التحدي 🔥)</option>
+            </select>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 1.1em;" onclick="initiateQuizEngine()">ابدأ التحدي الآن 🚀</button>
     </div>
 
-    <!-- المؤقت -->
-    <div id="timer">الوقت المتبقي: <span id="timeDisplay">00:00</span></div>
-
-    <!-- نموذج الاختبار -->
-    <form id="quizForm">
-        <!-- Question 1 -->
-        <div class="question-block">
-            <div class="question-text">1. Meningitis clinical presentation includes:</div>
-            <div class="options">
-                <label><input type="radio" name="q1" value="A"> A. Hypotension</label>
-                <label><input type="radio" name="q1" value="B"> B. Edema</label>
-                <label><input type="radio" name="q1" value="C"> C. Fever and convulsions</label>
-                <label><input type="radio" name="q1" value="D"> D. Respiratory distress</label>
+    <!-- منطقة عرض الكويز التفاعلي بعد البدء -->
+    <div class="quiz-layout" id="quizLayout">
+        
+        <!-- المنطقة الأساسية للسؤال النشط -->
+        <div class="quiz-main">
+            <div class="question-box" id="questionBox">
+                <!-- يتم توليد محتوى السؤال هنا برمجياً -->
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-secondary" id="prevBtn" onclick="navigateQuestion(-1)">⬅️ السابق</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="navigateQuestion(1)">التالي ➡️</button>
             </div>
         </div>
 
-        <!-- Question 2 -->
-        <div class="question-block">
-            <div class="question-text">2. One of the advantages of breast feeding to the mother:</div>
-            <div class="options">
-                <label><input type="radio" name="q2" value="A"> A. Increase incident of breast cancer</label>
-                <label><input type="radio" name="q2" value="B"> B. Decrease Incidence of breast cancer</label>
-                <label><input type="radio" name="q2" value="C"> C. Increase IQ for the baby</label>
-                <label><input type="radio" name="q2" value="D"> D. Decrease Incidence of Obesity of the baby</label>
+        <!-- اللوحة الجانبية للتنقل وتتبع الأسئلة -->
+        <div class="quiz-sidebar">
+            <div class="sidebar-title">📌 خريطة تتبع الأسئلة</div>
+            <div class="question-grid" id="navigationGrid">
+                <!-- يتم توليد أرقام الأسئلة هنا تلقائياً -->
             </div>
+            
+            <button class="btn btn-success" id="submitQuizBtn" onclick="finalizeQuizSubmission()">إنهاء الكويز وتسليم الورقة 📝</button>
         </div>
 
-        <!-- Question 3 -->
-        <div class="question-block">
-            <div class="question-text">3. Nephrotic syndrome clinical picture includes:</div>
-            <div class="options">
-                <label><input type="radio" name="q3" value="A"> A. Hypocholestrolemia</label>
-                <label><input type="radio" name="q3" value="B"> B. Edema</label>
-                <label><input type="radio" name="q3" value="C"> C. Hypoglycemia</label>
-                <label><input type="radio" name="q3" value="D"> D. Fever</label>
-            </div>
-        </div>
+    </div>
 
-        <!-- Question 4 -->
-        <div class="question-block">
-            <div class="question-text">4. Rheumatic fever major criteria include:</div>
-            <div class="options">
-                <label><input type="radio" name="q4" value="A"> A. Fever</label>
-                <label><input type="radio" name="q4" value="B"> B. Carditis</label>
-                <label><input type="radio" name="q4" value="C"> C. Edema</label>
-                <label><input type="radio" name="q4" value="D"> D. Hypertension</label>
-            </div>
-        </div>
+    <!-- لوحة عرض تفاصيل النتيجة بعد التسليم -->
+    <div id="resultPanel"></div>
 
-        <!-- Question 5 -->
-        <div class="question-block">
-            <div class="question-text">5. In nephritis urine amount is:</div>
-            <div class="options">
-                <label><input type="radio" name="q5" value="A"> A. Oliguric</label>
-                <label><input type="radio" name="q5" value="B"> B. Normal</label>
-                <label><input type="radio" name="q5" value="C"> C. Polyuric</label>
-                <label><input type="radio" name="q5" value="D"> D. None of the above</label>
-            </div>
-        </div>
-
-        <!-- Question 6 -->
-        <div class="question-block">
-            <div class="question-text">6. Anti-infective advantage of breast milk is due to IgA especially in colostrum:</div>
-            <div class="options">
-                <label><input type="radio" name="q6" value="A"> A. True</label>
-                <label><input type="radio" name="q6" value="B"> B. False</label>
-            </div>
-        </div>
-
-        <!-- Question 7 -->
-        <div class="question-block">
-            <div class="question-text">7. Aseptic meningitis is due to inflammation of meninges with Bacterial infection:</div>
-            <div class="options">
-                <label><input type="radio" name="q7" value="A"> A. True</label>
-                <label><input type="radio" name="q7" value="B"> B. False</label>
-            </div>
-        </div>
-
-        <!-- Question 8 -->
-        <div class="question-block">
-            <div class="question-text">8. Breast feeding decreases risk for Atopy:</div>
-            <div class="options">
-                <label><input type="radio" name="q8" value="A"> A. True</label>
-                <label><input type="radio" name="q8" value="B"> B. False</label>
-            </div>
-        </div>
-
-        <!-- Question 9 -->
-        <div class="question-block">
-            <div class="question-text">9. Encephalitis is inflammation of meninges:</div>
-            <div class="options">
-                <label><input type="radio" name="q9" value="A"> A. True</label>
-                <label><input type="radio" name="q9" value="B"> B. False</label>
-            </div>
-        </div>
-
-        <!-- Question 10 -->
-        <div class="question-block">
-            <div class="question-text">10. E.coli One of causes of Bacterial meningitis in older child with good immunity without traumatic alteration:</div>
-            <div class="options">
-                <label><input type="radio" name="q10" value="A"> A. True</label>
-                <label><input type="radio" name="q10" value="B"> B. False</label>
-            </div>
-        </div>
-
-        <button type="button" class="btn" style="width: 100%; font-size: 1.2em;" onclick="calculateScore()">إرسال الإجابات وإظهار النتيجة</button>
-    </form>
-
-    <div id="result"></div>
-
+    <!-- تذييل الصفحة لحقوق الجروب وقنوات التليجرام -->
     <div class="footer">
-        <p>👨‍⚕️ <strong>إعداد: جروب تمريضولوجي</strong></p>
+        <p>👨‍⚕️ <strong>إعداد وتنسيق: جروب تمريضولوجي</strong></p>
         <p>
-            <a href="https://t.me/Nursingology2025" target="_blank">🔗 قناة التليجرام</a> | 
-            <a href="https://t.me/NursBeniSuefBot" target="_blank">🤖 بوت القناة</a>
+            <a href="https://t.me/Nursingology2025" target="_blank">🔗 قناة التليجرام الرسمية</a> | 
+            <a href="https://t.me/NursBeniSuefBot" target="_blank">🤖 بوت القناة المساعد</a>
         </p>
     </div>
 </div>
 
 <script>
-    const correctAnswers = {
-        q1: "C", q2: "B", q3: "B", q4: "B", q5: "A",
-        q6: "A", q7: "B", q8: "A", q9: "B", q10: "B"
-    };
+    // قاعدة البيانات الكاملة للأسئلة مع إجاباتها الصحيحة طبقاً للملف المرفق
+    const originalQuestionsDataset = [
+        { id: 1, text: "Meningitis clinical presentation includes:", options: { A: "A. Hypotension", B: "B. Edema", C: "C. Fever and convulsions", D: "D. Respiratory distress" }, correct: "C" },
+        { id: 2, text: "One of the advantages of breast feeding to the mother:", options: { A: "A. Increase incident of breast cancer", B: "B. Decrease Incidence of breast cancer", C: "C. Increase IQ for the baby", D: "D. Decrease Incidence of Obesity of the baby" }, correct: "B" },
+        { id: 3, text: "Nephrotic syndrome clinical picture includes:", options: { A: "A. Hypocholestrolemia", B: "B. Edema", C: "C. Hypoglycemia", D: "D. Fever" }, correct: "B" },
+        { id: 4, text: "Rheumatic fever major criteria include:", options: { A: "A. Fever", B: "B. Carditis", C: "C. Edema", D: "D. Hypertension" }, correct: "B" },
+        { id: 5, text: "In nephritis urine amount is:", options: { A: "A. Oliguric", B: "B. Normal", C: "C. Polyuric", D: "D. None of the above" }, correct: "A" },
+        { id: 6, text: "Anti-infective advantage of breast milk is due to IgA especially in colostrum:", options: { A: "A. True", B: "B. False" }, correct: "A" },
+        { id: 7, text: "Aseptic meningitis is due to inflammation of meninges with Bacterial infection:", options: { A: "A. True", B: "B. False" }, correct: "B" },
+        { id: 8, text: "Breast feeding decreases risk for Atopy:", options: { A: "A. True", B: "B. False" }, correct: "A" },
+        { id: 9, text: "Encephalitis is inflammation of meninges:", options: { A: "A. True", B: "B. False" }, correct: "B" },
+        { id: 10, text: "E.coli One of causes of Bacterial meningitis in older child with good immunity without traumatic alteration:", options: { A: "A. True", B: "B. False" }, correct: "B" }
+    ];
 
-    let timerInterval;
+    let dynamicQuizQuestions = [];
+    let activeQuestionCursor = 0;
+    let userSelectedAnswers = {};
+    let countdownInterval;
+    let isQuizSubmitted = false;
 
-    function startQuiz() {
-        // إخفاء شاشة الإعدادات وإظهار الكويز
-        document.getElementById('setupScreen').style.display = 'none';
-        document.getElementById('quizForm').style.display = 'block';
+    // دالة لخلط الأسئلة بشكل عشوائي تماماً
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
 
-        // إعداد المؤقت
-        let minutesSelected = parseInt(document.getElementById('timerSelect').value);
-        if (minutesSelected > 0) {
-            document.getElementById('timer').style.display = 'block';
-            startTimer(minutesSelected);
+    // بدء تشغيل محرك الكويز وإعداد البيئة
+    function initiateQuizEngine() {
+        const orderType = document.getElementById('orderType').value;
+        dynamicQuizQuestions = [...originalQuestionsDataset];
+        
+        if (orderType === 'random') {
+            shuffleArray(dynamicQuizQuestions);
+        }
+
+        // إعداد المؤقت الزمني
+        const durationInput = document.getElementById('quizDurationInput').value;
+        if (durationInput && parseInt(durationInput) > 0) {
+            document.getElementById('timerBox').style.display = 'block';
+            activateCountdownTimer(parseInt(durationInput));
+        }
+
+        // إخفاء شاشة الإعدادات وعرض واجهة الكويز
+        document.getElementById('setupCard').style.display = 'none';
+        document.getElementById('quizLayout').style.display = 'table';
+        document.getElementById('quizMeta').textContent = `عدد الأسئلة الكلي: ${dynamicQuizQuestions.length} أسئلة`;
+
+        generateSidebarNavigationGrid();
+        renderActiveQuestion();
+    }
+
+    // توليد الخريطة الجانبية لتتبع الأسئلة وحالة الحل
+    function generateSidebarNavigationGrid() {
+        const gridContainer = document.getElementById('navigationGrid');
+        gridContainer.innerHTML = '';
+        
+        dynamicQuizQuestions.forEach((q, index) => {
+            const circle = document.createElement('div');
+            circle.className = 'nav-circle';
+            circle.id = `nav-idx-${index}`;
+            circle.textContent = index + 1;
+            circle.onclick = () => { jumpToSpecificQuestion(index); };
+            gridContainer.appendChild(circle);
+        });
+        updateSidebarStatusVisuals();
+    }
+
+    // عرض السؤال الحالي مع الخيارات المتوفرة له
+    function renderActiveQuestion() {
+        const currentQuestion = dynamicQuizQuestions[activeQuestionCursor];
+        const container = document.getElementById('questionBox');
+        
+        let optionsHTML = '';
+        for (let [key, val] of Object.entries(currentQuestion.options)) {
+            let labelClass = '';
+            let checkedStr = (userSelectedAnswers[currentQuestion.id] === key) ? 'checked' : '';
+            let disabledStr = isQuizSubmitted ? 'disabled' : '';
+
+            // تمييز الإجابات باللون الأخضر والأحمر بعد التسليم
+            if (isQuizSubmitted) {
+                if (key === currentQuestion.correct) {
+                    labelClass = 'option-correct';
+                } else if (userSelectedAnswers[currentQuestion.id] === key && key !== currentQuestion.correct) {
+                    labelClass = 'option-incorrect';
+                }
+            }
+
+            optionsHTML += `
+                <label class="${labelClass}">
+                    <input type="radio" name="active_opt" value="${key}" ${checkedStr} ${disabledStr} onchange="registerUserSelection('${currentQuestion.id}', '${key}')">
+                    ${val}
+                </label>
+            `;
+        }
+
+        container.innerHTML = `
+            <div class="question-text">${activeQuestionCursor + 1}. ${currentQuestion.text}</div>
+            <div class="options-list">${optionsHTML}</div>
+        `;
+
+        // تحديث أزرار التحكم بالتنقل
+        document.getElementById('prevBtn').disabled = (activeQuestionCursor === 0);
+        document.getElementById('nextBtn').textContent = (activeQuestionCursor === dynamicQuizQuestions.length - 1) ? 'المراجعة والإنهاء 🏁' : 'التالي ➡️';
+        
+        updateSidebarStatusVisuals();
+    }
+
+    // حفظ خيار الطالب وتحديث خريطة التتبع فوراً
+    function registerUserSelection(questionId, selectedValue) {
+        if (isQuizSubmitted) return;
+        userSelectedAnswers[questionId] = selectedValue;
+        updateSidebarStatusVisuals();
+    }
+
+    // تحديث الألوان والحالة البصرية للشريط الجانبي
+    function updateSidebarStatusVisuals() {
+        dynamicQuizQuestions.forEach((q, index) => {
+            const circle = document.getElementById(`nav-idx-${index}`);
+            if (!circle) return;
+
+            // إزالة التنسيقات القديمة قبل التحديث
+            circle.classList.remove('active', 'answered');
+
+            if (index === activeQuestionCursor) {
+                circle.classList.add('active');
+            }
+            if (userSelectedAnswers[q.id]) {
+                circle.classList.add('answered');
+            }
+
+            // تلوين نهائي بعد تسليم النموذج
+            if (isQuizSubmitted) {
+                circle.classList.remove('active', 'answered');
+                if (userSelectedAnswers[q.id] === q.correct) {
+                    circle.classList.add('correct');
+                } else {
+                    circle.classList.add('incorrect');
+                }
+            }
+        });
+    }
+
+    // التنقل خطوة للأمام أو الخلف
+    function navigateQuestion(step) {
+        let newCursor = activeQuestionCursor + step;
+        if (newCursor >= 0 && newCursor < dynamicQuizQuestions.length) {
+            activeQuestionCursor = newCursor;
+            renderActiveQuestion();
         }
     }
 
-    function startTimer(minutes) {
-        let seconds = minutes * 60;
-        let display = document.getElementById('timeDisplay');
+    // القفز المباشر لسؤال معين عبر شريط التنقل
+    function jumpToSpecificQuestion(index) {
+        activeQuestionCursor = index;
+        renderActiveQuestion();
+    }
 
-        timerInterval = setInterval(function () {
-            let m = Math.floor(seconds / 60);
-            let s = seconds % 60;
+    // تشغيل العداد التنازلي التلقائي للوقت المحدد
+    function activateCountdownTimer(minutes) {
+        let totalSeconds = minutes * 60;
+        const clockDisplay = document.getElementById('timeClock');
+
+        countdownInterval = setInterval(() => {
+            let m = Math.floor(totalSeconds / 60);
+            let s = totalSeconds % 60;
 
             m = m < 10 ? "0" + m : m;
             s = s < 10 ? "0" + s : s;
 
-            display.textContent = m + ":" + s;
+            clockDisplay.textContent = `${m}:${s}`;
 
-            if (--seconds < 0) {
-                clearInterval(timerInterval);
-                alert("انتهى الوقت! سيتم تسليم الإجابات الآن تلقائياً.");
-                calculateScore();
+            if (--totalSeconds < 0) {
+                clearInterval(countdownInterval);
+                alert("⏰ انتهى الوقت المخصص للاختبار! سيتم تسليم إجاباتك الحالية فوراً تلقائياً.");
+                finalizeQuizSubmission();
             }
         }, 1000);
     }
 
-    function calculateScore() {
-        // إيقاف العداد لو شغال
-        if (timerInterval) clearInterval(timerInterval);
-
-        let score = 0;
-        let total = Object.keys(correctAnswers).length;
-        let form = document.getElementById('quizForm');
-        let formData = new FormData(form);
-
-        for (let [question, answer] of Object.entries(correctAnswers)) {
-            let userAnswer = formData.get(question);
-            let questionBlock = document.querySelector(`input[name="${question}"]`).closest('.question-block');
-            
-            // تنظيف التنسيقات السابقة
-            questionBlock.style.borderRight = "4px solid #ccc";
-
-            if (userAnswer === answer) {
-                score++;
-                questionBlock.style.borderRight = "5px solid #28a745"; // أخضر للإجابة الصحيحة
-            } else {
-                questionBlock.style.borderRight = "5px solid #dc3545"; // أحمر للإجابة الخاطئة
-            }
-        }
-
-        let resultDiv = document.getElementById('result');
-        resultDiv.style.display = "block";
+    // حساب النتيجة النهائية وتلوين الإجابات وتسليم النموذج
+    function finalizeQuizSubmission() {
+        if (isQuizSubmitted) return;
         
-        if (score === total) {
-            resultDiv.style.backgroundColor = "#d4edda";
-            resultDiv.style.color = "#155724";
-            resultDiv.innerHTML = `🏆 ممتاز جداً! نتيجتك: ${score} من ${total}`;
-        } else if (score >= total / 2) {
-            resultDiv.style.backgroundColor = "#fff3cd";
-            resultDiv.style.color = "#856404";
-            resultDiv.innerHTML = `👍 جيد جداً! نتيجتك: ${score} من ${total}. راجع الأسئلة المحددة باللون الأحمر.`;
+        if (countdownInterval) clearInterval(countdownInterval);
+        isQuizSubmitted = true;
+
+        let totalCorrectScore = 0;
+        dynamicQuizQuestions.forEach(q => {
+            if (userSelectedAnswers[q.id] === q.correct) {
+                totalCorrectScore++;
+            }
+        });
+
+        const totalQuestionsCount = dynamicQuizQuestions.length;
+        const finalResultPanel = document.getElementById('resultPanel');
+        finalResultPanel.style.display = "block";
+
+        // تخصيص رسالة شكر وتقييم رايق حسب النتيجة
+        if (totalCorrectScore === totalQuestionsCount) {
+            finalResultPanel.style.backgroundColor = "#c6f6d5";
+            finalResultPanel.style.color = "#22543d";
+            finalResultPanel.innerHTML = `🏆 الأسطورة البصمجي الكبير قفل الامتحان! نتيجتك: لقد أجبت على ${totalCorrectScore} أسئلة صحيحة من إجمالي ${totalQuestionsCount} أسئلة!`;
+        } else if (totalCorrectScore >= totalQuestionsCount / 2) {
+            finalResultPanel.style.backgroundColor = "#feebc8";
+            finalResultPanel.style.color = "#744210";
+            finalResultPanel.innerHTML = `💪 نتيجة ممتازة يا بطل! لقد أجبت على ${totalCorrectScore} أسئلة صحيحة من إجمالي ${totalQuestionsCount} أسئلة. راجع أخطائك في الخريطة الجانبية باللون الأحمر.`;
         } else {
-            resultDiv.style.backgroundColor = "#f8d7da";
-            resultDiv.style.color = "#721c24";
-            resultDiv.innerHTML = `📚 تحتاج للمزيد من المذاكرة. نتيجتك: ${score} من ${total}. راجع الأسئلة المحددة باللون الأحمر.`;
+            finalResultPanel.style.backgroundColor = "#fed7d7";
+            finalResultPanel.style.color = "#742a2a";
+            finalResultPanel.innerHTML = `📚 محاولة جيدة ولكن تحتاج لمراجعة سريعة للمنهج. لقد أجبت على ${totalCorrectScore} أسئلة صحيحة فقط من إجمالي ${totalQuestionsCount}. بالتوفيق في المرة القادمة!`;
         }
 
-        // إخفاء زر الإرسال بعد التسليم
-        document.querySelector('button[onclick="calculateScore()"]').style.display = 'none';
+        // إخفاء زر التسليم وتحديث عرض الأسئلة لإظهار نموذج الإجابة النموذجي
+        document.getElementById('submitQuizBtn').style.display = 'none';
+        renderActiveQuestion();
     }
 </script>
 
