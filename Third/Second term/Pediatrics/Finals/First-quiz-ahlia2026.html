@@ -12,21 +12,103 @@
             line-height: 1.6;
             margin: 0;
             padding: 20px;
+            position: relative;
         }
+
+        /* العلامة المائية */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhIt1bXXa9kD1APc8qcfG9r-s-lmI_3C6Kg13rCIvfgPkMlXpBOud245tlNkAdnGQHEH6dNeYIn8OhziKzqcteGbRyAiZry4C0raemhyIsC-_BjpcPxZM4cHb13JGjRPNXagxJR27aj7SAnQDc14ciVx5JEHlLuu3Nju7i-geTkdZK4ySIHlL9p6ULremM/s16000/%D8%AA%D9%85%D8%B1%D9%8A%D8%B6%D9%88%D9%84%D9%88%D8%AC%D9%8A%20%D9%84%D9%88%D8%AC%D9%88%20png.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 50%;
+            opacity: 0.1; /* شفافية العلامة المائية */
+            z-index: -1;
+            pointer-events: none;
+        }
+
         .container {
             max-width: 800px;
             margin: auto;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.95);
             padding: 20px 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
         }
+
         h1 {
             text-align: center;
             color: #0056b3;
             border-bottom: 2px solid #0056b3;
             padding-bottom: 10px;
+            margin-bottom: 5px;
         }
+
+        .quiz-info {
+            text-align: center;
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .setup-screen {
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .setup-screen select {
+            padding: 10px;
+            font-size: 1.1em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 10px 5px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #004494;
+        }
+
+        .btn-download {
+            background-color: #28a745;
+        }
+
+        .btn-download:hover {
+            background-color: #218838;
+        }
+
+        #timer {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #dc3545;
+            margin-bottom: 20px;
+            display: none;
+        }
+
         .question-block {
             margin-bottom: 20px;
             padding: 15px;
@@ -34,36 +116,37 @@
             border-radius: 6px;
             direction: ltr; /* لأن الأسئلة بالإنجليزية */
             text-align: left;
+            border-right: 4px solid #0056b3;
         }
+
         .question-text {
             font-weight: bold;
             font-size: 1.1em;
             margin-bottom: 10px;
+            color: #2c3e50;
         }
+
         .options label {
             display: block;
             margin-bottom: 8px;
             cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background 0.2s;
         }
+
+        .options label:hover {
+            background-color: #d1e1f0;
+        }
+
         .options input {
             margin-right: 10px;
         }
-        .submit-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: #0056b3;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.2em;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background 0.3s;
+
+        #quizForm {
+            display: none;
         }
-        .submit-btn:hover {
-            background-color: #004494;
-        }
+
         #result {
             margin-top: 20px;
             padding: 15px;
@@ -73,16 +156,70 @@
             border-radius: 5px;
             display: none;
         }
-        .correct { color: green; }
-        .incorrect { color: red; }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+            font-size: 1em;
+        }
+
+        .footer a {
+            color: #0056b3;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 10px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* تنسيقات الطباعة (للتحميل كـ PDF) */
+        @media print {
+            body::before {
+                opacity: 0.2 !important;
+                -webkit-print-color-adjust: exact;
+            }
+            .setup-screen, .btn, #timer, .footer {
+                display: none !important;
+            }
+            #quizForm {
+                display: block !important;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>الكويز الأول أهلية 2026 - Pediatrics</h1>
-    
+    <div class="quiz-info" id="quizInfo">عدد الأسئلة: 10 أسئلة</div>
+
+    <!-- شاشة الإعدادات -->
+    <div class="setup-screen" id="setupScreen">
+        <p>اختر طريقة الحل التي تفضلها:</p>
+        <select id="timerSelect">
+            <option value="0">بدون وقت (تدريب مفتوح)</option>
+            <option value="5">5 دقائق (سريع)</option>
+            <option value="10">10 دقائق (متوسط)</option>
+            <option value="15">15 دقيقة (مريح)</option>
+        </select>
+        <br>
+        <button class="btn" onclick="startQuiz()">ابدأ الكويز الآن</button>
+        <button class="btn btn-download" onclick="window.print()">تحميل الكويز (PDF)</button>
+    </div>
+
+    <!-- المؤقت -->
+    <div id="timer">الوقت المتبقي: <span id="timeDisplay">00:00</span></div>
+
+    <!-- نموذج الاختبار -->
     <form id="quizForm">
+        <!-- Question 1 -->
         <div class="question-block">
             <div class="question-text">1. Meningitis clinical presentation includes:</div>
             <div class="options">
@@ -93,6 +230,7 @@
             </div>
         </div>
 
+        <!-- Question 2 -->
         <div class="question-block">
             <div class="question-text">2. One of the advantages of breast feeding to the mother:</div>
             <div class="options">
@@ -103,6 +241,7 @@
             </div>
         </div>
 
+        <!-- Question 3 -->
         <div class="question-block">
             <div class="question-text">3. Nephrotic syndrome clinical picture includes:</div>
             <div class="options">
@@ -113,6 +252,7 @@
             </div>
         </div>
 
+        <!-- Question 4 -->
         <div class="question-block">
             <div class="question-text">4. Rheumatic fever major criteria include:</div>
             <div class="options">
@@ -123,6 +263,7 @@
             </div>
         </div>
 
+        <!-- Question 5 -->
         <div class="question-block">
             <div class="question-text">5. In nephritis urine amount is:</div>
             <div class="options">
@@ -133,6 +274,7 @@
             </div>
         </div>
 
+        <!-- Question 6 -->
         <div class="question-block">
             <div class="question-text">6. Anti-infective advantage of breast milk is due to IgA especially in colostrum:</div>
             <div class="options">
@@ -141,6 +283,7 @@
             </div>
         </div>
 
+        <!-- Question 7 -->
         <div class="question-block">
             <div class="question-text">7. Aseptic meningitis is due to inflammation of meninges with Bacterial infection:</div>
             <div class="options">
@@ -149,6 +292,7 @@
             </div>
         </div>
 
+        <!-- Question 8 -->
         <div class="question-block">
             <div class="question-text">8. Breast feeding decreases risk for Atopy:</div>
             <div class="options">
@@ -157,6 +301,7 @@
             </div>
         </div>
 
+        <!-- Question 9 -->
         <div class="question-block">
             <div class="question-text">9. Encephalitis is inflammation of meninges:</div>
             <div class="options">
@@ -165,6 +310,7 @@
             </div>
         </div>
 
+        <!-- Question 10 -->
         <div class="question-block">
             <div class="question-text">10. E.coli One of causes of Bacterial meningitis in older child with good immunity without traumatic alteration:</div>
             <div class="options">
@@ -173,28 +319,66 @@
             </div>
         </div>
 
-        <button type="button" class="submit-btn" onclick="calculateScore()">إرسال الإجابات وإظهار النتيجة</button>
+        <button type="button" class="btn" style="width: 100%; font-size: 1.2em;" onclick="calculateScore()">إرسال الإجابات وإظهار النتيجة</button>
     </form>
 
     <div id="result"></div>
+
+    <div class="footer">
+        <p>👨‍⚕️ <strong>إعداد: جروب تمريضولوجي</strong></p>
+        <p>
+            <a href="https://t.me/Nursingology2025" target="_blank">🔗 قناة التليجرام</a> | 
+            <a href="https://t.me/NursBeniSuefBot" target="_blank">🤖 بوت القناة</a>
+        </p>
+    </div>
 </div>
 
 <script>
-    // الإجابات الصحيحة بناءً على الملف المرفق
     const correctAnswers = {
-        q1: "C",
-        q2: "B",
-        q3: "B",
-        q4: "B",
-        q5: "A",
-        q6: "A",
-        q7: "B",
-        q8: "A",
-        q9: "B",
-        q10: "B" // E.coli is typical in neonates, not older children
+        q1: "C", q2: "B", q3: "B", q4: "B", q5: "A",
+        q6: "A", q7: "B", q8: "A", q9: "B", q10: "B"
     };
 
+    let timerInterval;
+
+    function startQuiz() {
+        // إخفاء شاشة الإعدادات وإظهار الكويز
+        document.getElementById('setupScreen').style.display = 'none';
+        document.getElementById('quizForm').style.display = 'block';
+
+        // إعداد المؤقت
+        let minutesSelected = parseInt(document.getElementById('timerSelect').value);
+        if (minutesSelected > 0) {
+            document.getElementById('timer').style.display = 'block';
+            startTimer(minutesSelected);
+        }
+    }
+
+    function startTimer(minutes) {
+        let seconds = minutes * 60;
+        let display = document.getElementById('timeDisplay');
+
+        timerInterval = setInterval(function () {
+            let m = Math.floor(seconds / 60);
+            let s = seconds % 60;
+
+            m = m < 10 ? "0" + m : m;
+            s = s < 10 ? "0" + s : s;
+
+            display.textContent = m + ":" + s;
+
+            if (--seconds < 0) {
+                clearInterval(timerInterval);
+                alert("انتهى الوقت! سيتم تسليم الإجابات الآن تلقائياً.");
+                calculateScore();
+            }
+        }, 1000);
+    }
+
     function calculateScore() {
+        // إيقاف العداد لو شغال
+        if (timerInterval) clearInterval(timerInterval);
+
         let score = 0;
         let total = Object.keys(correctAnswers).length;
         let form = document.getElementById('quizForm');
@@ -205,13 +389,13 @@
             let questionBlock = document.querySelector(`input[name="${question}"]`).closest('.question-block');
             
             // تنظيف التنسيقات السابقة
-            questionBlock.style.border = "none";
+            questionBlock.style.borderRight = "4px solid #ccc";
 
             if (userAnswer === answer) {
                 score++;
-                questionBlock.style.borderLeft = "5px solid green";
+                questionBlock.style.borderRight = "5px solid #28a745"; // أخضر للإجابة الصحيحة
             } else {
-                questionBlock.style.borderLeft = "5px solid red";
+                questionBlock.style.borderRight = "5px solid #dc3545"; // أحمر للإجابة الخاطئة
             }
         }
 
@@ -221,16 +405,19 @@
         if (score === total) {
             resultDiv.style.backgroundColor = "#d4edda";
             resultDiv.style.color = "#155724";
-            resultDiv.innerHTML = `ممتاز! نتيجتك: ${score} من ${total}`;
+            resultDiv.innerHTML = `🏆 ممتاز جداً! نتيجتك: ${score} من ${total}`;
         } else if (score >= total / 2) {
             resultDiv.style.backgroundColor = "#fff3cd";
             resultDiv.style.color = "#856404";
-            resultDiv.innerHTML = `جيد جداً! نتيجتك: ${score} من ${total}. راجع الأسئلة المحددة باللون الأحمر.`;
+            resultDiv.innerHTML = `👍 جيد جداً! نتيجتك: ${score} من ${total}. راجع الأسئلة المحددة باللون الأحمر.`;
         } else {
             resultDiv.style.backgroundColor = "#f8d7da";
             resultDiv.style.color = "#721c24";
-            resultDiv.innerHTML = `تحتاج للمزيد من المذاكرة. نتيجتك: ${score} من ${total}. راجع الأسئلة المحددة باللون الأحمر.`;
+            resultDiv.innerHTML = `📚 تحتاج للمزيد من المذاكرة. نتيجتك: ${score} من ${total}. راجع الأسئلة المحددة باللون الأحمر.`;
         }
+
+        // إخفاء زر الإرسال بعد التسليم
+        document.querySelector('button[onclick="calculateScore()"]').style.display = 'none';
     }
 </script>
 
