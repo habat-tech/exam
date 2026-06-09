@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Retardation (MR) Nursing Quiz</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --container-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #38bdf8;
+            --accent-hover: #0284c7;
+            --option-bg: #334155;
+            --option-hover: #475569;
+            --correct-bg: #22c55e;
+            --wrong-bg: #ef4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            background-color: var(--container-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--option-bg);
+        }
+
+        .quiz-header h1 {
+            color: var(--accent-color);
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background-color: var(--option-bg);
+            color: var(--text-color);
+            border: 2px solid transparent;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover {
+            background-color: var(--option-hover);
+            border-color: var(--accent-color);
+        }
+
+        .option-btn.selected {
+            border-color: var(--accent-color);
+            background-color: var(--option-hover);
+        }
+
+        .option-btn.correct {
+            background-color: var(--correct-bg) !important;
+            border-color: var(--correct-bg) !important;
+            color: white;
+        }
+
+        .option-btn.wrong {
+            background-color: var(--wrong-bg) !important;
+            border-color: var(--wrong-bg) !important;
+            color: white;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .nav-btn:disabled {
+            background-color: var(--option-bg);
+            cursor: not-allowed;
+            color: #94a3b8;
+        }
+
+        .progress {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .result-container {
+            text-align: center;
+            display: none;
+        }
+
+        .score-text {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container" id="quizBox">
+    <div class="quiz-header">
+        <h1>Mental Retardation (MR) Quiz</h1>
+        <p>Comprehensive Nursing Care for Special Needs</p>
+    </div>
+
+    <div id="quizArea">
+        <div class="progress" id="progressText">Question 1 of 45</div>
+        <div class="question-text" id="questionText">Loading question...</div>
+        <div class="options-container" id="optionsContainer">
+            </div>
+        
+        <div class="controls">
+            <button class="nav-btn" id="checkBtn" onclick="checkAnswer()">Check Answer</button>
+            <button class="nav-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next Question</button>
+        </div>
+    </div>
+
+    <div class="result-container" id="resultArea">
+        <h2>Quiz Completed!</h2>
+        <div class="score-text" id="scoreText">You scored: 0 / 45</div>
+        <button class="nav-btn" onclick="location.reload()">Restart Quiz</button>
+    </div>
+</div>
+
+<script>
+    // Selected 45 Questions extracted from the document
+    const quizData = [
+        { q: "Mental retardation is defined as a state of impairment of intelligency, memory, and adaptive behavior. This impairment must be dating from:", opts: ["A. Adulthood", "B. Early life", "C. The age of 18", "D. The school age period"], ans: 1 },
+        { q: "Which of the following is considered an intoxication cause that can lead to mental retardation?", opts: ["A. Phenylketonuria", "B. Tuberous sclerosis", "C. Microcephaly", "D. Kernicterus"], ans: 2 },
+        { q: "Inadequate nutrition and metabolic disorders are known causes of mental retardation. A prime example of this is:", opts: ["A. Congenital rubella", "B. Syphilis", "C. Phenylketonuria", "D. Autism"], ans: 2 },
+        { q: "A gross postnatal brain disease that can lead to mental retardation is:", opts: ["A. Down syndrome", "B. Tuberous sclerosis", "C. Hydrocephalus", "D. Prematurity"], ans: 1 },
+        { q: "Which of the following psychiatric disorders has its onset during the child's developmental period up to age 18 and is associated with MR?", opts: ["A. Schizophrenia", "B. Bipolar disorder", "C. Autism", "D. Depression"], ans: 2 },
+        { q: "Which of the following is NOT a manifestation of mental retardation?", opts: ["A. Delayed development", "B. Enhanced social adjustment", "C. Impaired learning ability", "D. Lack of sphincteric control"], ans: 1 },
+        { q: "Cognitive disabilities associated with mental retardation include disorders in reading, writing, and:", opts: ["A. Hearing", "B. Speaking", "C. Mathematics", "D. Vision"], ans: 2 },
+        { q: "Mental retardation is a state of impairment of intelligence that typically dates from adult life.", opts: ["A. True", "B. False"], ans: 1 },
+        { q: "Autism is clinically classified as a chromosomal abnormality that causes mental retardation.", opts: ["A. True", "B. False"], ans: 1 },
+        { q: "Impaired learning ability and poor social adjustment are core manifestations of mental retardation.", opts: ["A. True", "B. False"], ans: 0 },
+        { q: "Excessive maternal alcohol consumption during pregnancy is considered an environmental influence rather than an intoxication cause.", opts: ["A. True", "B. False"], ans: 1 },
+        { q: "A child with mental retardation is classified as 'Educable'. What is the expected IQ range for this child?", opts: ["A. 51-75", "B. 21-50", "C. 0-20", "D. 76-90"], ans: 0 },
+        { q: "A patient with an IQ between 21 and 50 is clinically classified under which degree of mental retardation?", opts: ["A. Mild degree", "B. Moderate degree", "C. Severe degree", "D. Profound degree"], ans: 1 },
+        { q: "Patients who are completely dependent on others for their care usually fall into which classification of MR?", opts: ["A. Trainable", "B. Educable", "C. Severely MR", "D. Mildly MR"], ans: 2 },
+        { q: "Which blood test is specifically mentioned in the investigations for mental retardation to rule out endocrine issues?", opts: ["A. CBC and CRP", "B. Fasting blood sugar", "C. Liver enzymes", "D. T4 and TSH estimation"], ans: 3 },
+        { q: "To identify intracranial calcification or cranial anomalies, which investigation is primarily ordered?", opts: ["A. Blood Karyotyping", "B. X-ray skull", "C. Fundus examination", "D. Psychometric evaluation"], ans: 1 },
+        { q: "Karyotyping is an investigation utilized specifically to detect:", opts: ["A. Visual acuity", "B. Chromosomal abnormalities", "C. Auditory acuity", "D. Antenatal infections"], ans: 1 },
+        { q: "Children with a moderate degree of mental retardation (IQ 21-50) are generally classified as completely dependent on others.", opts: ["A. True", "B. False"], ans: 1 },
+        { q: "Psychometric evaluation is an investigation used primarily to screen for visual and auditory acuity.", opts: ["A. True", "B. False"], ans: 1 },
+        { q: "Patients with severe mental retardation have an IQ range between 0 and 20.", opts: ["A. True", "B. False"], ans: 0 },
+        { q: "A CAT scan and ultrasonography of the skull are strictly contraindicated when investigating a child with mental retardation.", opts: ["A. True", "B. False"], ans: 1 },
+        { q: "Genetic counseling for hereditary causes after an accurate diagnosis is considered which level of prevention?", opts: ["A. Primary prevention", "B. Secondary prevention", "C. Tertiary prevention", "D. Rehabilitation"], ans: 1 },
+        { q: "Vaccination of all females against rubella should ideally be performed:", opts: ["A. During the first trimester", "B. During the third trimester", "C. Before the childbearing period", "D. After delivery"], ans: 2 },
+        { q: "Early diagnosis and management to help parents cope effectively with the handicapped child is the definition of:", opts: ["A. Primary prevention", "B. Secondary prevention", "C. Tertiary prevention", "D. Health promotion"], ans: 1 },
+        { q: "According to secondary prevention, to encourage a desirable behavior to be repeated, the nurse should use:", opts: ["A. Strict isolation", "B. Negative pressure", "C. Operant conditioning (Reinforcement)", "D. Physical restraint"], ans: 2 },
+        { q: "To establish a routine schedule of elimination, the nurse should advise placing the child on the toilet every:", opts: ["A. 1 hour", "B. 2 hours", "C. 4 hours", "D. 6 hours"], ans: 0 },
+        { q: "When helping parents select toys for a child with mental retardation, the selection should be based primarily on the child's:", opts: ["A. Chronological age", "B. Physical size", "C. Mental age", "D. Motor skills"], ans: 2 },
+        { q: "When a retarded child is hospitalized, the nurse should obtain the schedule for routine care from:", opts: ["A. The physician", "B. The mother", "C. The hospital protocol", "D. The teacher"], ans: 1 },
+        { q: "Which of the following is a key action in secondary prevention to prevent further emotional problems for the child?", opts: ["A. Forcing the child to learn rapidly", "B. Eliminating all playtime", "C. Not using pressure to force learning", "D. Isolating the child from siblings"], ans: 2 },
+        { q: "Amniotic fluid analysis for high-risk pregnancies is considered a method of secondary prevention.", opts: ["A. True", "B. False"], ans: 1 },
+        { q: "A retarded child needs love and security for a shorter period because they become independent faster than normal children.", opts: ["A. True", "B. False"], ans: 1 },
+        { q: "Parents and teachers are encouraged to use continuous pressure and force to help a retarded child learn faster.", opts: ["A. True", "B. False"], ans: 1 },
+        { q: "Engaging the child in a foster home or day care is a nursing role in secondary prevention for managing emotional problems.", opts: ["A. True", "B. False"], ans: 0 },
+        { q: "A nurse is evaluating a 5-year-old child who recently scored an IQ of 45 on a psychometric evaluation. The nurse explains to the parents that the child's educational potential is classified as:", opts: ["A. Educable", "B. Trainable", "C. Completely dependent", "D. Normal"], ans: 1 },
+        { q: "A pregnant woman is exposed to a severe Rubella infection during her first trimester. The medical team considers a therapeutic abortion. This medical and nursing intervention is fundamentally classified as:", opts: ["A. Primary prevention", "B. Secondary prevention", "C. Palliative care", "D. Tertiary prevention"], ans: 0 },
+        { q: "A 10-year-old child with severe MR is admitted to the pediatric ward. The child becomes highly agitated when the hospital's meal routine is applied. What is the most appropriate nursing intervention?", opts: ["A. Force the child to adapt to the hospital's routine.", "B. Obtain the home routine schedule from the mother to guide hospital care.", "C. Administer sedatives to calm the child.", "D. Ignore the agitation until the child is hungry."], ans: 1 },
+        { q: "A mother asks the nurse for advice on buying a birthday gift for her 9-year-old son who has mental retardation and a mental age of 3 years. The nurse's best response is to recommend:", opts: ["A. A complex puzzle suitable for a 9-year-old.", "B. Toys designed for a 3-year-old to match his mental age.", "C. Video games to force cognitive development.", "D. Books meant for middle-school children."], ans: 1 },
+        { q: "During a clinic visit, a mother expresses frustration that her child with MR is not learning to tie his shoes quickly, and she admits to shouting at him. The nurse intervenes, advising against using pressure because it will:", opts: ["A. Improve his motor skills eventually.", "B. Cause irreversible physical brain damage.", "C. Lead to frustration and further emotional problems.", "D. Make the child completely dependent."], ans: 2 },
+        { q: "A nursing student wants to teach a hospitalized child with MR how to brush his teeth. The student asks the clinical instructor for the best psychological approach. The instructor recommends:", opts: ["A. Operant conditioning, by rewarding the child when he performs the behavior correctly.", "B. Threatening the child with an injection if he refuses.", "C. Doing it for him to save time.", "D. Showing him a textbook about dental hygiene."], ans: 0 },
+        { q: "A newborn is born with microcephaly. The neonatologist suspects a cranial anomaly. Which imaging technique should the nurse prepare the newborn for to specifically identify any intracranial anomaly?", opts: ["A. X-ray of the chest", "B. Karyotyping", "C. CAT scan and ultrasonography of the skull.", "D. T4 and TSH blood test"], ans: 2 },
+        { q: "A nurse in the community clinic is administering the Rubella vaccine to a pregnant woman in her second trimester as a primary prevention strategy against mental retardation.", opts: ["A. True", "B. False"], ans: 1 },
+        { q: "A nurse is advising the parents of a child with MR on establishing bowel control. The nurse correctly instructs them to place the child on the toilet only when the child verbally asks to go.", opts: ["A. True", "B. False"], ans: 1 },
+        { q: "A pediatric nurse receives a completely dependent 6-year-old patient. Based on the classification of mental retardation, the nurse correctly expects the patient's IQ to be between 51 and 75.", opts: ["A. True", "B. False"], ans: 1 },
+        { q: "A nursing intervention includes sitting with the siblings of a newly diagnosed retarded child to explain the condition clearly, eliminate misconceptions, and reduce their anxiety.", opts: ["A. True", "B. False"], ans: 0 },
+        { q: "A genetic counselor identifies a chromosomal abnormality in a fetus through amniotic fluid analysis. This action is categorized as a secondary prevention measure.", opts: ["A. True", "B. False"], ans: 0 }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let selectedOption = null;
+    let answered = false;
+
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const progressText = document.getElementById('progressText');
+    const checkBtn = document.getElementById('checkBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const quizArea = document.getElementById('quizArea');
+    const resultArea = document.getElementById('resultArea');
+    const scoreText = document.getElementById('scoreText');
+
+    function loadQuestion() {
+        answered = false;
+        selectedOption = null;
+        checkBtn.disabled = true;
+        nextBtn.disabled = true;
+        
+        const qData = quizData[currentQuestion];
+        progressText.innerText = `Question ${currentQuestion + 1} of ${quizData.length}`;
+        questionText.innerText = qData.q;
+        optionsContainer.innerHTML = '';
+
+        qData.opts.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => selectOption(index, btn);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectOption(index, btn) {
+        if (answered) return;
+        
+        const buttons = optionsContainer.getElementsByClassName('option-btn');
+        for (let b of buttons) {
+            b.classList.remove('selected');
+        }
+        
+        btn.classList.add('selected');
+        selectedOption = index;
+        checkBtn.disabled = false;
+    }
+
+    function checkAnswer() {
+        if (selectedOption === null || answered) return;
+        
+        answered = true;
+        checkBtn.disabled = true;
+        nextBtn.disabled = false;
+
+        const correctAns = quizData[currentQuestion].ans;
+        const buttons = optionsContainer.getElementsByClassName('option-btn');
+
+        if (selectedOption === correctAns) {
+            buttons[selectedOption].classList.add('correct');
+            score++;
+        } else {
+            buttons[selectedOption].classList.add('wrong');
+            buttons[correctAns].classList.add('correct');
+        }
+    }
+
+    function nextQuestion() {
+        currentQuestion++;
+        if (currentQuestion < quizData.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        quizArea.style.display = 'none';
+        resultArea.style.display = 'block';
+        scoreText.innerText = `You scored: ${score} / ${quizData.length}`;
+    }
+
+    // Initialize Quiz
+    loadQuestion();
+</script>
+
+</body>
+</html>
